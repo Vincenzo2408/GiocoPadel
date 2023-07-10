@@ -48,6 +48,7 @@ public void loadElencoPadeleur() throws ParseException {
                 String[] datiPadeleur = linea.split(",");
                 
                 // Analizza la riga e crea un nuovo oggetto Padeleur
+                if(datiPadeleur.length>=5){
                 String nome = datiPadeleur[0];
                 String cognome = datiPadeleur[1];
                 String codiceFiscale = datiPadeleur[2];
@@ -57,15 +58,17 @@ public void loadElencoPadeleur() throws ParseException {
                 
                 Padeleur padeleur = new Padeleur(nome, cognome, codiceFiscale, dataDiNascita, email);
                 
+                
                 // Aggiungi il giocatore all'elencoPadeleur
                 elencoPadeleur.put(codiceFiscale, padeleur);
+                }
+                
             }
-            
             bfElencoPadeleur.close();
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-    }
+}
 
 /*metodo getElencoPadeleur() per ottenere la mappa elencoPadeleur dal di fuori della classe. */
 public Map<String, Padeleur> getElencoPadeleur() {
@@ -95,8 +98,9 @@ public void confermaNuovoPadeleur(){
 public void salvaPadeleurSuFile() {
     try {
         BufferedWriter writer = new BufferedWriter(new FileWriter("padeleur.txt", true));
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String riga = nuovoPadeleur.getNome() + "," + nuovoPadeleur.getCognome() + "," + nuovoPadeleur.getCodiceFiscale() + ","
-                + nuovoPadeleur.getDataDiNascita() + "," + nuovoPadeleur.getEmail();
+                + sdf.format(nuovoPadeleur.getDataDiNascita()) + "," + nuovoPadeleur.getEmail();
         writer.write(riga);
         writer.newLine();
         writer.close();

@@ -1,4 +1,7 @@
 Mario,Rossi,ABC123,01/01/1990,mario.rossi@example.com
 Laura,Bianchi,DEF456,15/05/1995,laura.bianchi@example.com
 Luigi,Verdi,GHI789,10/12/1988,luigi.verdi@example.com
-Francesco,Marrone,PLM123,Wed Aug 23 00:00:00 CEST 2000,francesco.marrone@example.com
+Francesco,Marrone,AVT678,05/05/2000,francesco.marrone@example.com
+Vincenzo,Giallo,GLL090,24/08/1999,vincenzo.giallo@example.com
+Lorenzo,Lime,LLO340,20/01/1997,lorenzo.lime@example.com
+Loredana,Blu,LBL102,05/05/2005,loredana.blu@example.com

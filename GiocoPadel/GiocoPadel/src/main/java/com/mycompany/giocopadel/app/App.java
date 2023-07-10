@@ -73,7 +73,7 @@ public class App {
                         System.out.println("Codice fiscale: " + padeleur.getCodiceFiscale());
                         System.out.println("Nome: " + padeleur.getNome());
                         System.out.println("Cognome: " + padeleur.getCognome());
-                        System.out.println("Data di nascita: " + padeleur.getDataDiNascita());
+                        System.out.println("Data di nascita: " + sdf.format(padeleur.getDataDiNascita()));
                         System.out.println("Email: " + padeleur.getEmail());
                         System.out.println("---------------");
                     }
