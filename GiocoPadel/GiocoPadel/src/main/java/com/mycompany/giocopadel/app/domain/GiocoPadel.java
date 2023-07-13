@@ -11,15 +11,17 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
 public class GiocoPadel {
-    public static GiocoPadel giocoPadel;
-    private Map<String, Padeleur> elencoPadeleur;
-    private Padeleur nuovoPadeleur;  
+    public static GiocoPadel giocopadel;
+    public Map<String, Padeleur> elencoPadeleur;
+    public Padeleur nuovoPadeleur;  
 
 
 public GiocoPadel() throws ParseException{ //Singleton
@@ -28,8 +30,8 @@ public GiocoPadel() throws ParseException{ //Singleton
 }
         
 public static GiocoPadel getInstance() throws ParseException{
-        if(giocoPadel==null) giocoPadel=new GiocoPadel();
-        return giocoPadel;
+        if(giocopadel==null) giocopadel=new GiocoPadel();
+        return giocopadel;
 }
 
         
@@ -109,4 +111,41 @@ public void salvaPadeleurSuFile() {
         e.printStackTrace();
     }
 }
+
+public void svuotaFilePadeleur() {
+        try {
+            // Sovrascrive il file "padeleur.txt" creando un nuovo file vuoto
+            BufferedWriter writer = new BufferedWriter(new FileWriter("padeleur.txt"));
+            writer.close();
+            System.out.println("File padeleur.txt svuotato correttamente.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Padeleur caricaPadeleurDaFile() {
+        try {
+            // Legge l'ultima riga dal file "padeleur.txt" e crea un oggetto Padeleur
+            Path filePath = Path.of("padeleur.txt");
+            String lastLine = Files.readAllLines(filePath).get(Files.readAllLines(filePath).size() - 1);
+            String[] datiPadeleur = lastLine.split(",");
+
+            if (datiPadeleur.length == 5) {
+                String nome = datiPadeleur[0];
+                String cognome = datiPadeleur[1];
+                String codiceFiscale = datiPadeleur[2];
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                Date dataDiNascita = sdf.parse(datiPadeleur[3]);
+                String email = datiPadeleur[4];
+
+                return new Padeleur(nome, cognome, codiceFiscale, dataDiNascita, email);
+            } else {
+                System.out.println("Errore nella lettura del file padeleur.txt.");
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

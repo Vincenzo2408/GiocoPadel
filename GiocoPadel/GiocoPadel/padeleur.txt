@@ -5,4 +5,3 @@ Francesco,Marrone,AVT678,05/05/2000,francesco.marrone@example.com
 Vincenzo,Giallo,GLL090,24/08/1999,vincenzo.giallo@example.com
 Lorenzo,Lime,LLO340,20/01/1997,lorenzo.lime@example.com
 Loredana,Blu,LBL102,05/05/2005,loredana.blu@example.com
-ciao,ciao,ciacia10,21/06/2000,ciaociao@example.com
