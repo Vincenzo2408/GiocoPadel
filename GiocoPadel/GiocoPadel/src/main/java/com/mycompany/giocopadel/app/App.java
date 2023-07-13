@@ -5,8 +5,8 @@
  */
 package com.mycompany.giocopadel.app;
 
-import com.mycompany.giocopadel.domain.GiocoPadel;
-import com.mycompany.giocopadel.domain.Padeleur;
+import com.mycompany.giocopadel.app.domain.GiocoPadel;
+import com.mycompany.giocopadel.app.domain.Padeleur;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
