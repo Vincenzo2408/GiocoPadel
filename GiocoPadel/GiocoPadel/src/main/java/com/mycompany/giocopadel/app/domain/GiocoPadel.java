@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class GiocoPadel {
-    public static GiocoPadel giocopadel;
+    public static GiocoPadel giocoPadel;
     private Map<String, Padeleur> elencoPadeleur;
     private Padeleur nuovoPadeleur;  
 
@@ -28,8 +28,8 @@ public GiocoPadel() throws ParseException{ //Singleton
 }
         
 public static GiocoPadel getInstance() throws ParseException{
-        if(giocopadel==null) giocopadel=new GiocoPadel();
-        return giocopadel;
+        if(giocoPadel==null) giocoPadel=new GiocoPadel();
+        return giocoPadel;
 }
 
         
