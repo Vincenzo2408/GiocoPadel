@@ -1,0 +1,3 @@
+1,true,10/07/2023,09:00,11:00,0,1,mario.rossi@example.com,laura.bianchi@example.com,luigi.verdi@example.com,francesco.marrone@example.com
+2,false,11/07/2023,14:30,16:30,0,2,laura.bianchi@example.com,luigi.verdi@example.com,francesco.marrone@example.com,mario.rossi@example.com
+3,true,12/07/2023,18:00,20:00,0,3,luigi.verdi@example.com,francesco.marrone@example.com,mario.rossi@example.com,laura.bianchi@example.com

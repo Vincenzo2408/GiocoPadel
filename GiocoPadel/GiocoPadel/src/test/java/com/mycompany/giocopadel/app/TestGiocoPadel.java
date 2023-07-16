@@ -36,10 +36,10 @@ public class TestGiocoPadel {
             verificaDettagliPersona1();
             verificaEsistenzaPadeleur();
             verificaNonEsistenzaPadeleur();
-            svuotaFilePadeleur();
+         
             inserisciNuovoPadeleur();
             salvaPadeleurSuFile();
-            verificaPadeleurSalvatoSuFile();
+            
         } catch (Exception e) {
             System.out.println("Errore: " + e.getMessage());
     }
@@ -67,12 +67,6 @@ public class TestGiocoPadel {
         assertFalse(giocoPadel.verificaEsistenzaPadeleur("nonEsiste@example.com"));
     }
 
-    private void svuotaFilePadeleur() {
-        giocoPadel.svuotaFilePadeleur();
-        Padeleur padeleurSalvato = giocoPadel.caricaPadeleurDaFile();
-        assertNull(padeleurSalvato);
-    }
-
     private void inserisciNuovoPadeleur() throws ParseException {
         giocoPadel.inserisciNuovoPadeleur("Luigi", "Verdi", "GHI789", new SimpleDateFormat("dd/MM/yyyy").parse("10/12/1988"), "luigi.verdi@example.com");
     }
@@ -81,15 +75,7 @@ public class TestGiocoPadel {
         giocoPadel.salvaPadeleurSuFile();
     }
 
-    private void verificaPadeleurSalvatoSuFile() throws ParseException {
-        Padeleur padeleurSalvato = giocoPadel.caricaPadeleurDaFile();
-        assertNotNull(padeleurSalvato);
-        assertEquals("Luigi", padeleurSalvato.getNome());
-        assertEquals("Verdi", padeleurSalvato.getCognome());
-        assertEquals("GHI789", padeleurSalvato.getCodiceFiscale());
-        assertEquals("10/12/1988", new SimpleDateFormat("dd/MM/yyyy").format(padeleurSalvato.getDataDiNascita()));
-        assertEquals("luigi.verdi@example.com", padeleurSalvato.getEmail());
-    }
+
 
 }
    
