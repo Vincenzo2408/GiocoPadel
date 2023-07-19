@@ -1,3 +1,7 @@
-1,true,10/07/2023,09:00,11:00,0,1,mario.rossi@example.com,laura.bianchi@example.com,luigi.verdi@example.com,francesco.marrone@example.com
+1,false,18/05/2020,15:00,17:00,0,1,mario.rossi@example.com,laura.bianchi@example.com,luigi.verdi@example.com,francesco.marrone@example.com
 2,false,11/07/2023,14:30,16:30,0,2,laura.bianchi@example.com,luigi.verdi@example.com,francesco.marrone@example.com,mario.rossi@example.com
-3,true,12/07/2023,18:00,20:00,0,3,luigi.verdi@example.com,francesco.marrone@example.com,mario.rossi@example.com,laura.bianchi@example.com
+3,false,12/07/2023,18:00,20:00,0,3,luigi.verdi@example.com,francesco.marrone@example.com,mario.rossi@example.com,laura.bianchi@example.com
+4,true,20/05/2020,15:00,17:00,25.0,2,mario.rossi@example.com,laura.bianchi@example.com,francesco.marrone@example.com,loredana.blu@example.com
+5,false,19/07/2023,12:00,12:15,2.5,1,mario.rossi@example.com,loredana.blu@example.com,luigi.verdi@example.com,vincenzo.giallo@example.com
+6,true,20/05/2020,15:15,16:20,24.0,3,vincenzo.giallo@example.com,francesco.marrone@example.com,mario.rossi@example.com,loredana.blu@example.com
+7,false,20/05/2020,15:00,16:30,10.0,1,mario.rossi@example.com,lorenzo.lime@example.com,loredana.blu@example.com,vincenzo.giallo@example.com

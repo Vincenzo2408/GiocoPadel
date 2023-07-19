@@ -6,7 +6,9 @@
 package com.mycompany.giocopadel.app.domain;
 
 import java.sql.Time;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Scanner;
 
 public class Prenotazione {
     private int idPrenotazione;
@@ -20,6 +22,8 @@ public class Prenotazione {
     private Partecipante partecipante3;
     private Partecipante partecipante4;
     private CampoPadel campoPadel;
+    private RichiestaAttrezzatura richiestaAttrezzatura;
+   
 
     public Prenotazione(int idPrenotazione, boolean attrezzaturaRichiesta, Date giornoPrenotazione, Time oraInizio, Time oraFine, float costoPrenotazione) {
         this.idPrenotazione = idPrenotazione;
@@ -118,8 +122,10 @@ public class Prenotazione {
         this.campoPadel = campoPadel;
     }
     
-    
-
+     public void setRichiestaAttrezzatura(RichiestaAttrezzatura richiestaAttrezzatura) {
+        this.richiestaAttrezzatura = richiestaAttrezzatura;
+    }
+      
     public class Partecipante {
         private Padeleur padeleur;
 
@@ -131,5 +137,35 @@ public class Prenotazione {
             return padeleur.getEmail();
         }
     }
+    
+     public float calcolaCostoAttrezzatura(int numeroRacchette, int numeroPalline, int racchetteTotali, int pallineTotali, Magazzino magazzino) { //Rif. UC2 1.1.1 GeneraCostoAttrezzatura(numeroRacchette, numeroPalline):float 3. SD InserimentoAttrezzatura
+        RichiestaAttrezzatura rich = new RichiestaAttrezzatura(0,0);
+        float costoAttrezzatura = 0.0f;
+        
+      
+        if (rich.verificaDisponibilitaAttrezzatura(numeroRacchette, numeroPalline, racchetteTotali, pallineTotali)) {
+            // Calcola il costo dell'attrezzatura
+            costoAttrezzatura = (numeroRacchette+numeroPalline) * magazzino.getCostoSingoloAttrezzatura();
+        } else {
+            System.out.println("Se vuoi continuare con la prenotazione digita 1, altrimenti digita qualsiasi altro tasto"); //Estensione 5a
+            int scelta=0;
+            Scanner tastiera=new Scanner(System.in);
+            scelta=tastiera.nextInt();
+            if(scelta==1){
+                System.out.println("La prenotazione continua senza aggiunta di attrezzatura");
+                costoAttrezzatura=0;
+            }
+            else{
+                System.out.println("Annullamento prenotazione");
+                costoAttrezzatura=-1.0f;
+            }
+            
+            
+        }
+
+        return costoAttrezzatura;
+    }
+    
+   
 }
 

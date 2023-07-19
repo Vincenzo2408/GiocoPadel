@@ -7,9 +7,13 @@ package com.mycompany.giocopadel.app;
 
 import com.mycompany.giocopadel.app.domain.GiocoPadel;
 import com.mycompany.giocopadel.app.domain.Padeleur;
+
+
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 import java.util.Scanner;
@@ -118,6 +122,8 @@ public class App {
                 case 1: //UC2
                     System.out.println("Inserisci email del Padeleur:");
                     String email = tastiera.next();
+                    int numeroRacchette=0;
+                    int numeroPalline=0;
 
                     if (giocopadel.verificaEsistenzaPadeleur(email)) {
                         boolean tutteLeEmailEsistenti = true;
@@ -138,8 +144,7 @@ public class App {
                         int idCampo;
                         int controlloprenotazione;
 
-                        System.out.println("Inserisci id della prenotazione:");
-                        idPrenotazione = tastiera.nextInt();
+                        idPrenotazione = 0;
                         System.out.println("Richiesta attrezzatura (true/false):");
                         attrezzaturaRichiesta = tastiera.nextBoolean();
                         
@@ -148,9 +153,15 @@ public class App {
                             System.out.println("Inserisci giorno della prenotazione (dd/MM/yyyy):");
                             giornoPrenotazione = sdf.parse(tastiera.next());
                             System.out.println("Inserisci ora di inizio (HH:mm):");
-                            oraInizio = Time.valueOf(tastiera.next());
+                            String oraInizioString = tastiera.next();
+                            LocalTime localTimeInizio = LocalTime.parse(oraInizioString, DateTimeFormatter.ofPattern("HH:mm"));
+                            oraInizio = Time.valueOf(localTimeInizio);
+
                             System.out.println("Inserisci ora di fine (HH:mm):");
-                            oraFine = Time.valueOf(tastiera.next());
+                            String oraFineString = tastiera.next();
+                            LocalTime localTimeFine = LocalTime.parse(oraFineString, DateTimeFormatter.ofPattern("HH:mm"));
+                            oraFine = Time.valueOf(localTimeFine);
+
                             System.out.println("Inserisci campo");
                             idCampo = tastiera.nextInt();
 
@@ -174,14 +185,22 @@ public class App {
 
                         if (tutteLeEmailEsistenti) {
                             giocopadel.inserisciNuovaPrenotazione(idPrenotazione, giornoPrenotazione, oraInizio, oraFine, email, email2, email3, email4, attrezzaturaRichiesta, idCampo);
+                            if(attrezzaturaRichiesta){
+                               System.out.println("Inserisci il numero di racchette richieste:");
+                               numeroRacchette = tastiera.nextInt();
+                               System.out.println("Inserisci il numero di palline richieste:");
+                               numeroPalline = tastiera.nextInt(); 
+                               giocopadel.inserimentoAttrezzatura(numeroRacchette, numeroPalline);
+                            } 
+                            
                             giocopadel.confermaNuovaPrenotazione();
 
-                            System.out.println("Nuova prenotazione inserita con successo.");
+                           
                         } else {
                             System.out.println("Una o più email inserite non corrispondono a Padeleur registrati.");
                         }
                     } else {
-                        System.out.println("Email non registrata nel sistema");
+                        System.out.println("Non sei registrato nel sistema");
                     }
                     break;
 

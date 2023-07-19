@@ -16,25 +16,35 @@ import java.nio.file.Path;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+
 
 public class GiocoPadel {
     public static GiocoPadel giocopadel;
     public Map<String, Padeleur> elencoPadeleur;
     private Map<Integer, Prenotazione> elencoPrenotazioni;
     private Map<Integer, CampoPadel> elencoCampiPadel;
+    private Map<String, Magazzino> elencoMagazzino;
+
     public Padeleur nuovoPadeleur;  
-    private Prenotazione nuovaPrenotazione;
+    public Prenotazione nuovaPrenotazione;
+    public Magazzino nuovoMagazzino;
+    
 
     public GiocoPadel() throws ParseException{ //Singleton
         this.elencoPadeleur=new HashMap<String, Padeleur>();
-        this.elencoPrenotazioni = new HashMap<>();
-        this.elencoCampiPadel = new HashMap<>();
+        this.elencoPrenotazioni = new HashMap<Integer, Prenotazione>();
+        this.elencoCampiPadel = new HashMap<Integer, CampoPadel>();
+        this.elencoMagazzino = new HashMap<String, Magazzino>();
 
         loadElencoPadeleur();
         loadCampiPadel();
         loadElencoPrenotazioni();
+        loadElencoMagazzino();
     }
 
     public static GiocoPadel getInstance() throws ParseException{
@@ -96,43 +106,70 @@ public class GiocoPadel {
     
     /*Creazione dell'elencoPrenotazioni*/
     public void loadElencoPrenotazioni() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("prenotazioni.txt"));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                int idPrenotazione = Integer.parseInt(data[0]);
+                boolean attrezzaturaRichiesta = Boolean.parseBoolean(data[1]);
+                Date giornoPrenotazione = new SimpleDateFormat("dd/MM/yyyy").parse(data[2]);
+                LocalTime tempoInizio = LocalTime.parse(data[3], DateTimeFormatter.ofPattern("HH:mm"));
+                Time oraInizio=Time.valueOf(tempoInizio);
+                LocalTime tempoFine = LocalTime.parse(data[4], DateTimeFormatter.ofPattern("HH:mm"));
+                Time oraFine=Time.valueOf(tempoFine);
+                float costoPrenotazione = Float.parseFloat(data[5]);
+                int idCampo = Integer.parseInt(data[6]);
+
+                Padeleur organizzatore = getPadeleurByEmail(data[7]);
+                Padeleur partecipante2 = getPadeleurByEmail(data[8]);
+                Padeleur partecipante3 = getPadeleurByEmail(data[9]);
+                Padeleur partecipante4 = getPadeleurByEmail(data[10]);
+
+                Prenotazione prenotazione = new Prenotazione(idPrenotazione ,attrezzaturaRichiesta, giornoPrenotazione, oraInizio, oraFine, costoPrenotazione);
+                prenotazione.setOrganizzatore(organizzatore);
+                prenotazione.setPartecipante2(partecipante2);
+                prenotazione.setPartecipante3(partecipante3);
+                prenotazione.setPartecipante4(partecipante4);
+                CampoPadel campoPadel = getCampoPadelById(idCampo);
+                prenotazione.setCampoPadel(campoPadel);
+
+                elencoPrenotazioni.put(idPrenotazione, prenotazione);
+            }
+
+            reader.close();
+            System.out.println("Caricamento delle prenotazioni completato con successo.");
+        } catch (IOException | ParseException e) {
+                System.out.println("Errore durante il caricamento delle prenotazioni: " + e.getMessage());
+        }
+    }
+    
+    /*Creazione dell'elenco magazzino*/
+    public void loadElencoMagazzino() {
     try {
-        BufferedReader reader = new BufferedReader(new FileReader("prenotazioni.txt"));
+        BufferedReader reader = new BufferedReader(new FileReader("magazzini.txt"));
         String line;
 
         while ((line = reader.readLine()) != null) {
             String[] data = line.split(",");
-            int idPrenotazione = Integer.parseInt(data[0]);
-            boolean attrezzaturaRichiesta = Boolean.parseBoolean(data[1]);
-            Date giornoPrenotazione = new SimpleDateFormat("dd/MM/yyyy").parse(data[2]);
-            Time oraInizio = Time.valueOf(data[3]);
-            Time oraFine = Time.valueOf(data[4]);
-            float costoPrenotazione = Float.parseFloat(data[5]);
-            int idCampo = Integer.parseInt(data[6]);
+            String idGiorno = data[0];
+            int racchetteRichieste = Integer.parseInt(data[1]);
+            int pallineRichieste = Integer.parseInt(data[2]);
 
-            Padeleur organizzatore = getPadeleurByEmail(data[7]);
-            Padeleur partecipante2 = getPadeleurByEmail(data[8]);
-            Padeleur partecipante3 = getPadeleurByEmail(data[9]);
-            Padeleur partecipante4 = getPadeleurByEmail(data[10]);
-
-            Prenotazione prenotazione = new Prenotazione(idPrenotazione, attrezzaturaRichiesta, giornoPrenotazione, oraInizio, oraFine, costoPrenotazione);
-            prenotazione.setOrganizzatore(organizzatore);
-            prenotazione.setPartecipante2(partecipante2);
-            prenotazione.setPartecipante3(partecipante3);
-            prenotazione.setPartecipante4(partecipante4);
-            CampoPadel campoPadel = getCampoPadelById(idCampo);
-            prenotazione.setCampoPadel(campoPadel);
-
-            elencoPrenotazioni.put(idPrenotazione, prenotazione);
+            Magazzino magazzino = new Magazzino(idGiorno, racchetteRichieste, pallineRichieste);
+            elencoMagazzino.put(idGiorno, magazzino);
         }
 
         reader.close();
-        System.out.println("Caricamento delle prenotazioni completato con successo.");
-    } catch (IOException | ParseException e) {
-        System.out.println("Errore durante il caricamento delle prenotazioni: " + e.getMessage());
+        System.out.println("Caricamento dell'elenco del magazzino completato con successo.");
+    } catch (IOException e) {
+        System.out.println("Errore durante il caricamento dell'elenco del magazzino: " + e.getMessage());
     }
 }
 
+    
+    
     public boolean verificaEsistenzaPadeleur(String email) { //Rif. UC1 e UC2 1.1 VerificaEmail(email): boolean 1. SD RichiestaEmail e 2.SD InserimentoDati 
         for (Padeleur padeleur : elencoPadeleur.values()) {
             if (padeleur.getEmail().equals(email)) {
@@ -144,10 +181,11 @@ public class GiocoPadel {
 
     public void inserisciNuovoPadeleur(String nome, String cognome, String codiceFiscale, Date dataDiNascita, String email) { //Rif. UC1 1.1 create(nome, cognome, codiceFiscale, dataDiNascita, email): void 2. SD InserimentoDatiAnagrafici
         nuovoPadeleur = new Padeleur(nome, cognome, codiceFiscale, dataDiNascita, email);
-        elencoPadeleur.put(codiceFiscale, nuovoPadeleur);
+      
     }
 
     public void confermaNuovoPadeleur(){ //Rif. UC1 1.1 add(nuovoPadeleur) 3. SD ConfermaPadeleur
+        elencoPadeleur.put(nuovoPadeleur.getCodiceFiscale(), nuovoPadeleur);
         salvaPadeleurSuFile();
         System.out.println("Nuovo Padeleur inserito con successo.");
     }
@@ -197,21 +235,103 @@ public class GiocoPadel {
         nuovaPrenotazione.setCampoPadel(campoPadel);
         
         double costoCampo=campoPadel.getCostoCampo(oraInizio, oraFine);
-        double costoAttrezzatura=0.0f;
-        
-        if(attrezzaturaRichiesta){
-            //Implementazione per SD 3. Inserimento Attrezzatura
-        }
+        float costoAttrezzatura=0;
         
         float costoPrenotazione=GeneraPrezzo(costoCampo, costoAttrezzatura);
-
-        elencoPrenotazioni.put(idPrenotazione, nuovaPrenotazione);   
+        nuovaPrenotazione.setCostoPrenotazione(costoPrenotazione);
     }
     
-    public float GeneraPrezzo(double costoCampo, double costoAttrezzatura){
-        float generazionePrezzo=0.0f;
-        //Da implementare
-        return generazionePrezzo;
+    public void inserimentoAttrezzatura(int numeroRacchette, int numeroPalline) { //Rif. UC2 1.1 AggiuntaAttrezzatura(...):void 3.SD InserimentoAttrezzatura
+        if (nuovaPrenotazione != null) {
+                Magazzino mag=new Magazzino("0",0,0);
+                float costoAttrezzatura=0.0f;
+                RichiestaAttrezzatura richiestaAttrezzatura = new RichiestaAttrezzatura(numeroRacchette, numeroPalline);
+                
+                Date giornoPrenotazione=nuovaPrenotazione.getGiornoPrenotazione();
+                Time oraFine=nuovaPrenotazione.getOraFine();
+                Time oraInizio=nuovaPrenotazione.getOraInizio();
+                             
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+                String giornoPrenotazioneString = dateFormat.format(giornoPrenotazione);
+                String oraFineString = timeFormat.format(oraFine);
+                String oraInizioString = timeFormat.format(oraInizio);
+
+                String idGiorno = giornoPrenotazioneString + oraInizioString + oraFineString;            
+                
+                int racchetteTotali=mag.getracchetteTotali();
+                int pallineTotali=mag.getpallineTotali();
+                              
+              
+                
+                for(Magazzino magazzino : elencoMagazzino.values()){
+                    if(idGiorno.substring(0,10).compareTo(magazzino.getidGiorno().substring(0, 10))==0 &&
+                       ((idGiorno.substring(10,15).compareTo(magazzino.getidGiorno().substring(10,15))>=0 && idGiorno.substring(10,15).compareTo(magazzino.getidGiorno().substring(15,20))<=0) ||
+                       (idGiorno.substring(15,20).compareTo(magazzino.getidGiorno().substring(10,15))>=0 && idGiorno.substring(15,20).compareTo(magazzino.getidGiorno().substring(15,20))<=0))    
+                       ){                      
+                        //Ci sono richieste di attrezzatura nella fascia oraria richiesta, calcolo racchette e palline totali disponibili
+                        racchetteTotali=racchetteTotali-magazzino.getracchetteRichieste();
+                        pallineTotali=pallineTotali-magazzino.getpallineRichieste();
+                    } 
+                }          
+                
+                costoAttrezzatura = nuovaPrenotazione.calcolaCostoAttrezzatura(numeroRacchette, numeroPalline, racchetteTotali, pallineTotali, mag); 
+                nuovaPrenotazione.setRichiestaAttrezzatura(richiestaAttrezzatura);
+                                    
+                float costoCampo=nuovaPrenotazione.getCampoPadel().getPrezzo();
+                float costoPrenotazione=GeneraPrezzo(costoCampo, costoAttrezzatura);
+                
+                if(costoAttrezzatura==0){ //Serve per estensione 5a
+                    nuovaPrenotazione.setAttrezzaturaRichiesta(false);
+                }
+                
+                if(costoAttrezzatura==-1.0f){ //Serve per estensione 5a
+                    System.out.println("Annullamento in corso..."); 
+                    costoPrenotazione=-1.0f;
+                } 
+                
+                nuovaPrenotazione.setCostoPrenotazione(costoPrenotazione);
+                
+                if(costoAttrezzatura>0){              
+                    for(Magazzino magazzino: elencoMagazzino.values()){
+                        if(idGiorno.compareTo(magazzino.getidGiorno())==0){
+                            String lettera = "R";
+                            idGiorno=idGiorno+lettera;
+                            for(Magazzino magaz: elencoMagazzino.values()){
+                                if(idGiorno.compareTo(magaz.getidGiorno())==0){
+                                lettera = "R";
+                                idGiorno=idGiorno+lettera;    
+                                }
+                            }
+                        }
+                    }    
+                    nuovoMagazzino=new Magazzino(idGiorno, numeroRacchette, numeroPalline);
+                }
+        }
+    }
+    
+     public int calcolaIndice(Date giorno, Time oraInizio, Time oraFine) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(giorno);
+        int giornoInt = cal.get(Calendar.DAY_OF_MONTH);
+        int meseInt=cal.get(Calendar.MONTH)+1;
+        int annoInt=cal.get(Calendar.YEAR);
+        int oraInizioInt = convertiTimeInInt(oraInizio);
+        int oraFineInt = convertiTimeInInt(oraFine);
+        return (annoInt + meseInt + giornoInt) * 100000000 + oraInizioInt * 10000 + oraFineInt; /* 11515001700 (115 id giorno, dalle 15:00 alle 17:00) */
+    }
+
+    private int convertiTimeInInt(Time time) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(time);
+        int hours = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = calendar.get(Calendar.MINUTE);
+        return hours * 100 + minutes; 
+    }
+    
+    public float GeneraPrezzo(double costoCampo, float costoAttrezzatura){ //Rif. UC2 4.GeneramentoCosto(costoCampo, costoTotaleAttrezzatura):float 2.SD InserimentoDati
+         float costoPrenotazione = (float) (costoCampo + costoAttrezzatura);
+         return costoPrenotazione;
     }
     
     public CampoPadel getCampoPadelById(int idCampo) {
@@ -224,7 +344,7 @@ public class GiocoPadel {
          long dueOreMillis = 2 * 60 * 60 * 1000; // Conversione due ore in millisecondi
 
         if (durataPrenotazioneMillis > dueOreMillis) {
-            System.out.println("Un campo può essere prenotato per un massimo di due ore consecutive.");
+            System.out.println("Un campo può essere prenotato per un massimo di due ore consecutive."); 
             return false; // Regola di dominio R3: Durata della prenotazione supera le due ore consentite
         }
         
@@ -236,14 +356,60 @@ public class GiocoPadel {
         }
             return true; // Il campo è disponibile
     }
-
-
-
-    public void confermaNuovaPrenotazione() {
-        // Implementa qui la logica per confermare e salvare la nuova prenotazione
-    }
     
    
 
+    public void confermaNuovaPrenotazione() {
+        if(nuovaPrenotazione.getCostoPrenotazione()==-1.0f){
+            System.out.println("Prenotazione annullata con successo");
+        }
+        else{
+            System.out.println("Il costo della prenotazione ammonta a"+ nuovaPrenotazione.getCostoPrenotazione());
+           if(nuovaPrenotazione.isAttrezzaturaRichiesta()){
+              
+                    elencoMagazzino.put(nuovoMagazzino.getidGiorno(), nuovoMagazzino);
+                    salvaMagazzinoSuFile(nuovoMagazzino);
+           }
+           //Aggiunta prenotazione al file
+           int creazioneIndice=0;
+           for(Prenotazione prenotazione: elencoPrenotazioni.values()){
+               creazioneIndice=prenotazione.getIdPrenotazione()+1;
+           }
+           nuovaPrenotazione.setIdPrenotazione(creazioneIndice);
+           elencoPrenotazioni.put(nuovaPrenotazione.getIdPrenotazione(), nuovaPrenotazione);
+           salvaPrenotazioneSuFile(nuovaPrenotazione);
 
+           System.out.println("Prenotazione confermata e salvata con successo. Id prenotazione = "+nuovaPrenotazione.getIdPrenotazione());          
+        }
+    }
+    
+    private void salvaMagazzinoSuFile(Magazzino magazzino) {
+    try {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("magazzini.txt", true));
+        String riga = magazzino.getidGiorno() + "," + magazzino.getracchetteRichieste() + "," + magazzino.getpallineRichieste();
+        writer.write(riga);
+        writer.newLine();
+        writer.close();
+        System.out.println("Magazzino salvato su file con successo.");
+    } catch (IOException e) {
+        System.out.println("Errore durante il salvataggio del magazzino su file: " + e.getMessage());
+    }
+}
+
+    private void salvaPrenotazioneSuFile(Prenotazione prenotazione) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("prenotazioni.txt", true));
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+            String riga = prenotazione.getIdPrenotazione() + "," + prenotazione.isAttrezzaturaRichiesta() + "," + sdf.format(prenotazione.getGiornoPrenotazione()) + "," +
+                    timeFormat.format(prenotazione.getOraInizio()) + "," + timeFormat.format(prenotazione.getOraFine()) + "," + prenotazione.getCostoPrenotazione() + "," + prenotazione.getCampoPadel().getIdCampo() + "," +
+                    prenotazione.getOrganizzatore().getEmail() + "," + prenotazione.getPartecipante2().getEmail() + "," + prenotazione.getPartecipante3().getEmail() + "," + prenotazione.getPartecipante4().getEmail();
+            writer.write(riga);
+            writer.newLine();
+            writer.close();
+            System.out.println("Prenotazione salvata su file con successo.");
+        } catch (IOException e) {
+            System.out.println("Errore durante il salvataggio della prenotazione su file: " + e.getMessage());
+        }
+    }
 }
