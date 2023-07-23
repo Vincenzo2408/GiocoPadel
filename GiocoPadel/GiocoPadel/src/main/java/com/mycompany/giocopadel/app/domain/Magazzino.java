@@ -10,8 +10,6 @@ package com.mycompany.giocopadel.app.domain;
  * @author gerar
  */
 
-import java.util.Date;
-import java.sql.Time;
 
 public class Magazzino {
     private String idGiorno;
@@ -50,10 +48,8 @@ public class Magazzino {
         return idGiorno;
     }
 
-    // Altri metodi per la gestione del magazzino (es. caricamento da file, salvataggio su file, ecc.)
-
     public float getCostoSingoloAttrezzatura() {
-       return costoSingoloAttrezzatura; //To change body of generated methods, choose Tools | Templates.
+       return costoSingoloAttrezzatura; 
     }
 
     void setnumeroRacchette(int numeroRacchette) {

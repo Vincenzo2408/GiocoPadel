@@ -166,7 +166,7 @@ public class GiocoPadel {
     }
 }
 
-    public boolean verificaEsistenzaPadeleur(String email) { //Rif. UC1 e UC2 1.1 VerificaEmail(email): boolean 1. SD RichiestaEmail e 2.SD InserimentoDati 
+    public boolean verificaEsistenzaPadeleur(String email) { 
         for (Padeleur padeleur : elencoPadeleur.values()) {
             if (padeleur.getEmail().equals(email)) {
                 return true; // L'utente esiste già
@@ -175,12 +175,12 @@ public class GiocoPadel {
         return false; // L'utente non esiste
     }
 
-    public void inserisciNuovoPadeleur(String nome, String cognome, String codiceFiscale, Date dataDiNascita, String email) { //Rif. UC1 1.1 create(nome, cognome, codiceFiscale, dataDiNascita, email): void 2. SD InserimentoDatiAnagrafici
+    public void inserisciNuovoPadeleur(String nome, String cognome, String codiceFiscale, Date dataDiNascita, String email) { 
         nuovoPadeleur = new Padeleur(nome, cognome, codiceFiscale, dataDiNascita, email);
       
     }
 
-    public void confermaNuovoPadeleur(){ //Rif. UC1 1.1 add(nuovoPadeleur) 3. SD ConfermaPadeleur
+    public void confermaNuovoPadeleur(){ 
         elencoPadeleur.put(nuovoPadeleur.getCodiceFiscale(), nuovoPadeleur);
         salvaPadeleurSuFile();
         System.out.println("Nuovo Padeleur inserito con successo.");
@@ -237,7 +237,7 @@ public class GiocoPadel {
         nuovaPrenotazione.setCostoPrenotazione(costoPrenotazione);
     }
     
-    public void inserimentoAttrezzatura(int numeroRacchette, int numeroPalline) { //Rif. UC2 1.1 AggiuntaAttrezzatura(...):void 3.SD InserimentoAttrezzatura
+    public void inserimentoAttrezzatura(int numeroRacchette, int numeroPalline) { 
         if (nuovaPrenotazione != null) {
                 Magazzino mag=new Magazzino("0",0,0);
                 float costoAttrezzatura=0.0f;
@@ -324,26 +324,7 @@ public class GiocoPadel {
         }
     }
     
-     public int calcolaIndice(Date giorno, Time oraInizio, Time oraFine) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(giorno);
-        int giornoInt = cal.get(Calendar.DAY_OF_MONTH);
-        int meseInt=cal.get(Calendar.MONTH)+1;
-        int annoInt=cal.get(Calendar.YEAR);
-        int oraInizioInt = convertiTimeInInt(oraInizio);
-        int oraFineInt = convertiTimeInInt(oraFine);
-        return (annoInt + meseInt + giornoInt) * 100000000 + oraInizioInt * 10000 + oraFineInt; /* 11515001700 (115 id giorno, dalle 15:00 alle 17:00) */
-    }
-
-    private int convertiTimeInInt(Time time) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(time);
-        int hours = calendar.get(Calendar.HOUR_OF_DAY);
-        int minutes = calendar.get(Calendar.MINUTE);
-        return hours * 100 + minutes; 
-    }
-    
-    public float GeneraPrezzo(double costoCampo, float costoAttrezzatura){ //Rif. UC2 4.GeneramentoCosto(costoCampo, costoTotaleAttrezzatura):float 2.SD InserimentoDati
+    public float GeneraPrezzo(double costoCampo, float costoAttrezzatura){ 
          float costoPrenotazione = (float) (costoCampo + costoAttrezzatura);
          return costoPrenotazione;
     }
