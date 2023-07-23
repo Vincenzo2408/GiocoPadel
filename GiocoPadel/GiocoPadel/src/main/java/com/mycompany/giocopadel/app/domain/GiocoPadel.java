@@ -11,8 +11,6 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,7 +20,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
-
 
 public class GiocoPadel {
     public static GiocoPadel giocopadel;
@@ -169,8 +166,6 @@ public class GiocoPadel {
     }
 }
 
-    
-    
     public boolean verificaEsistenzaPadeleur(String email) { //Rif. UC1 e UC2 1.1 VerificaEmail(email): boolean 1. SD RichiestaEmail e 2.SD InserimentoDati 
         for (Padeleur padeleur : elencoPadeleur.values()) {
             if (padeleur.getEmail().equals(email)) {
@@ -357,7 +352,6 @@ public class GiocoPadel {
         return elencoCampiPadel.get(idCampo);
     }
 
-    
     public boolean ControlloPrenotazione(int idCampo, Date giornoPrenotazione, Time oraInizio, Time oraFine) { //Rif. UC2 VerificaDisponibilita(...) 2. SD InserimentoDati
          long durataPrenotazioneMillis = oraFine.getTime() - oraInizio.getTime();
          long dueOreMillis = 2 * 60 * 60 * 1000; // Conversione due ore in millisecondi
@@ -376,8 +370,6 @@ public class GiocoPadel {
             return true; // Il campo è disponibile
     }
     
-   
-
     public void confermaNuovaPrenotazione() {
         if(nuovaPrenotazione.getCostoPrenotazione()==-1.0f){
             System.out.println("Prenotazione annullata con successo");
@@ -402,7 +394,7 @@ public class GiocoPadel {
         }
     }
     
-    private void salvaMagazzinoSuFile(Magazzino magazzino) {
+    public void salvaMagazzinoSuFile(Magazzino magazzino) {
     try {
         BufferedWriter writer = new BufferedWriter(new FileWriter("magazzini.txt", true));
         String riga = magazzino.getidGiorno() + "," + magazzino.getracchetteRichieste() + "," + magazzino.getpallineRichieste();
@@ -415,7 +407,7 @@ public class GiocoPadel {
     }
 }
 
-    private void salvaPrenotazioneSuFile(Prenotazione prenotazione) {
+    public void salvaPrenotazioneSuFile(Prenotazione prenotazione) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("prenotazioni.txt", true));
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");

@@ -6,9 +6,15 @@
 package com.mycompany.giocopadel.app;
 
 import com.mycompany.giocopadel.app.domain.GiocoPadel;
+import com.mycompany.giocopadel.app.domain.Magazzino;
 import com.mycompany.giocopadel.app.domain.Padeleur;
+import com.mycompany.giocopadel.app.domain.Prenotazione;
+import com.mycompany.giocopadel.app.domain.RichiestaAttrezzatura;
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
         
 import org.junit.jupiter.api.BeforeAll;
@@ -22,6 +28,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestGiocoPadel {
     static GiocoPadel giocoPadel;
     static Padeleur persona1;
+    
+    static Prenotazione prenotazione;
+    static RichiestaAttrezzatura richiestaAttrezzatura;
+    static Magazzino magazzino;
     
     @BeforeAll
     public static void initTest() throws ParseException {
@@ -40,10 +50,10 @@ public class TestGiocoPadel {
             inserisciNuovoPadeleur();
             salvaPadeleurSuFile();
             
-        } catch (Exception e) {
-            System.out.println("Errore: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Errore: " + e.getMessage());
+        }
     }
-}
 
     private void verificaElencoPadeleur() {
         Map<String, Padeleur> elencoPadeleur = giocoPadel.getElencoPadeleur();
@@ -75,9 +85,43 @@ public class TestGiocoPadel {
         giocoPadel.salvaPadeleurSuFile();
     }
 
-
-
+    @Test
+    public void testUC2() {
+        try {
+            verificaInserimentoNuovaPrenotazione();
+            verificaInserimentoAttrezzatura();
+            verificaControlloPrenotazione();
+            verificaConfermaNuovaPrenotazione();
+            
+            salvaPrenotazioneSuFile();
+            salvaMagazzinoSuFile();
+            
+            } catch (Exception e) {
+                System.out.println("Errore: " + e.getMessage());
+        }
+    }
+    
+    private void verificaInserimentoNuovaPrenotazione() throws ParseException {
+        giocoPadel.inserisciNuovaPrenotazione(10, new SimpleDateFormat("dd/MM/yyyy").parse("20/07/2023"), Time.valueOf(LocalTime.parse("10:00", DateTimeFormatter.ofPattern("HH:mm"))),  Time.valueOf(LocalTime.parse("11:00", DateTimeFormatter.ofPattern("HH:mm"))), "mario.rossi@example.com", "laura.bianchi@example.com", "francesco.marrone@example.com", "vincenzo.giallo@example.com", Boolean.parseBoolean("false"), 2);
+    }
+    
+    private void verificaInserimentoAttrezzatura() throws ParseException {
+        giocoPadel.inserimentoAttrezzatura(4, 4);
+    }
+    
+    private void verificaControlloPrenotazione()throws ParseException {
+        assertTrue(giocoPadel.ControlloPrenotazione(1, new SimpleDateFormat("dd/MM/yyyy").parse("18/05/2020"), Time.valueOf(LocalTime.parse("15:00", DateTimeFormatter.ofPattern("HH:mm"))), Time.valueOf(LocalTime.parse("17:00", DateTimeFormatter.ofPattern("HH:mm")))));
+    }
+    
+    private void verificaConfermaNuovaPrenotazione(){
+        giocoPadel.confermaNuovaPrenotazione();
+    }
+    
+    private void salvaPrenotazioneSuFile() {
+        giocoPadel.salvaPrenotazioneSuFile(prenotazione);
+    }
+    
+    private void salvaMagazzinoSuFile() {
+        giocoPadel.salvaMagazzinoSuFile(magazzino);
+    }
 }
-   
-   
-
