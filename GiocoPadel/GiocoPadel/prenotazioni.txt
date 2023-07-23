@@ -5,3 +5,4 @@
 5,false,19/07/2023,12:00,12:15,2.5,1,mario.rossi@example.com,loredana.blu@example.com,luigi.verdi@example.com,vincenzo.giallo@example.com
 6,true,20/05/2020,15:15,16:20,24.0,3,vincenzo.giallo@example.com,francesco.marrone@example.com,mario.rossi@example.com,loredana.blu@example.com
 7,false,20/05/2020,15:00,16:30,10.0,1,mario.rossi@example.com,lorenzo.lime@example.com,loredana.blu@example.com,vincenzo.giallo@example.com
+8,true,22/05/2020,10:00,11:15,30.0,1,mario.rossi@example.com,loredana.blu@example.com,francesco.marrone@example.com,lorenzo.lime@example.com

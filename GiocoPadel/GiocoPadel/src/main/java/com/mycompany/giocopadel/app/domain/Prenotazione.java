@@ -136,36 +136,6 @@ public class Prenotazione {
         public String getEmail() {
             return padeleur.getEmail();
         }
-    }
-    
-     public float calcolaCostoAttrezzatura(int numeroRacchette, int numeroPalline, int racchetteTotali, int pallineTotali, Magazzino magazzino) { //Rif. UC2 1.1.1 GeneraCostoAttrezzatura(numeroRacchette, numeroPalline):float 3. SD InserimentoAttrezzatura
-        RichiestaAttrezzatura rich = new RichiestaAttrezzatura(0,0);
-        float costoAttrezzatura = 0.0f;
-        
-      
-        if (rich.verificaDisponibilitaAttrezzatura(numeroRacchette, numeroPalline, racchetteTotali, pallineTotali)) {
-            // Calcola il costo dell'attrezzatura
-            costoAttrezzatura = (numeroRacchette+numeroPalline) * magazzino.getCostoSingoloAttrezzatura();
-        } else {
-            System.out.println("Se vuoi continuare con la prenotazione digita 1, altrimenti digita qualsiasi altro tasto"); //Estensione 5a
-            int scelta=0;
-            Scanner tastiera=new Scanner(System.in);
-            scelta=tastiera.nextInt();
-            if(scelta==1){
-                System.out.println("La prenotazione continua senza aggiunta di attrezzatura");
-                costoAttrezzatura=0;
-            }
-            else{
-                System.out.println("Annullamento prenotazione");
-                costoAttrezzatura=-1.0f;
-            }
-            
-            
-        }
-
-        return costoAttrezzatura;
-    }
-    
-   
+    }  
 }
 

@@ -31,15 +31,5 @@ public class RichiestaAttrezzatura {
     public float getCostoTotaleAttrezzatura() {
         return costoTotaleAttrezzatura;
     }
-    
-    public boolean verificaDisponibilitaAttrezzatura(int numeroRacchette, int numeroPalline, int racchetteTotali, int pallineTotali) { //Rif. UC2 1.1.1.1 VerificaDisponibilita(...) Rif. 3.SD InserimentoAttrezzatura
-        if (racchetteTotali >= numeroRacchette && pallineTotali>= numeroPalline) {
-            System.out.println("Attrezzature disponibili");
-            return true; // Attrezzature disponibili
-        } else {
-            System.out.println("Attrezzature non disponibili");
-            return false; // Attrezzature non disponibili
-        }
-    }
 }
 

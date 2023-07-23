@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Scanner;
 
 
 public class GiocoPadel {
@@ -275,7 +276,25 @@ public class GiocoPadel {
                     } 
                 }          
                 
-                costoAttrezzatura = nuovaPrenotazione.calcolaCostoAttrezzatura(numeroRacchette, numeroPalline, racchetteTotali, pallineTotali, mag); 
+                if (racchetteTotali >= numeroRacchette && pallineTotali>= numeroPalline) {
+                    // Calcola il costo dell'attrezzatura
+                    System.out.println("Attrezzature disponibili. ");
+                    costoAttrezzatura = (numeroRacchette+numeroPalline) * mag.getCostoSingoloAttrezzatura();
+                } else {
+                    System.out.println("Attrezzature non disponibili. ");
+                    System.out.println("Se vuoi continuare con la prenotazione digita 1, altrimenti digita qualsiasi altro tasto"); //Estensione 5a
+                    int scelta=0;
+                    Scanner tastiera=new Scanner(System.in);
+                    scelta=tastiera.nextInt();
+                    if(scelta==1){
+                        System.out.println("La prenotazione continua senza aggiunta di attrezzatura");
+                        costoAttrezzatura=0;
+                    }
+                    else{
+                        System.out.println("Annullamento prenotazione");
+                        costoAttrezzatura=-1.0f;
+                    }
+                } 
                 nuovaPrenotazione.setRichiestaAttrezzatura(richiestaAttrezzatura);
                                     
                 float costoCampo=nuovaPrenotazione.getCampoPadel().getPrezzo();
