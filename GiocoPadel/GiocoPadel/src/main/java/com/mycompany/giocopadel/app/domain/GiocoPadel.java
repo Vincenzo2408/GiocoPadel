@@ -33,7 +33,7 @@ public class GiocoPadel {
     public Magazzino nuovoMagazzino;
     
 
-    public GiocoPadel() throws ParseException{ //Singleton
+    public GiocoPadel() throws ParseException{ 
         this.elencoPadeleur=new HashMap<String, Padeleur>();
         this.elencoPrenotazioni = new HashMap<Integer, Prenotazione>();
         this.elencoCampiPadel = new HashMap<Integer, CampoPadel>();
@@ -45,7 +45,7 @@ public class GiocoPadel {
         loadElencoMagazzino();
     }
 
-    public static GiocoPadel getInstance() throws ParseException{
+    public static GiocoPadel getInstance() throws ParseException{ //Pattern GoF Singleton
             if(giocopadel==null) giocopadel=new GiocoPadel();
             return giocopadel;
     }
@@ -215,7 +215,8 @@ public class GiocoPadel {
         return elencoPadeleur;
     }
     
-    public void inserisciNuovaPrenotazione(int idPrenotazione, Date giornoPrenotazione, Time oraInizio,Time oraFine,String email,String email2,String email3, String email4, boolean attrezzaturaRichiesta, int idCampo) { //Rif. UC2 createNuovaPrenotazione (...) 2. SD InserimentoDati
+    public void inserisciNuovaPrenotazione(int idPrenotazione, Date giornoPrenotazione, Time oraInizio,Time oraFine,String email,String email2,String email3, String email4, boolean attrezzaturaRichiesta, int idCampo, int numeroRacchette, int numeroPalline) { 
+        int annullamento=0;
         Padeleur organizzatore = getPadeleurByEmail(email);
         Padeleur partecipante2 = getPadeleurByEmail(email2);
         Padeleur partecipante3 = getPadeleurByEmail(email3);
@@ -230,84 +231,66 @@ public class GiocoPadel {
         nuovaPrenotazione.setPartecipante4(partecipante4);
         nuovaPrenotazione.setCampoPadel(campoPadel);
         
-        double costoCampo=campoPadel.getCostoCampo(oraInizio, oraFine);
-        float costoAttrezzatura=0;
+        //Pattern Gof Strategy
+        nuovaPrenotazione.setPagamentoStrategy(new PagamentoStandard());
+        Magazzino magazzino=new Magazzino("0",0,0);
         
-        float costoPrenotazione=GeneraPrezzo(costoCampo, costoAttrezzatura);
+        if (attrezzaturaRichiesta) {
+            if(inserimentoAttrezzatura(numeroRacchette, numeroPalline, magazzino)){
+                nuovaPrenotazione.setAttrezzaturaStrategy(new PagamentoAttrezzatura());               
+            }
+            else {
+                annullamento=1;
+            }
+        } else {
+            nuovaPrenotazione.setAttrezzaturaStrategy(null); // Nessuna attrezzatura richiesta
+            RichiestaAttrezzatura richiestaAttrezzatura = new RichiestaAttrezzatura(0, 0);
+            nuovaPrenotazione.setRichiestaAttrezzatura(richiestaAttrezzatura);
+        }
+        
+        
+        float costoPrenotazione = nuovaPrenotazione.calcolaImportoTotale(magazzino);
         nuovaPrenotazione.setCostoPrenotazione(costoPrenotazione);
+         if(annullamento==1){
+            nuovaPrenotazione.setCostoPrenotazione(-1.0f);
+        }
     }
     
-    public void inserimentoAttrezzatura(int numeroRacchette, int numeroPalline) { 
-        if (nuovaPrenotazione != null) {
-                Magazzino mag=new Magazzino("0",0,0);
-                float costoAttrezzatura=0.0f;
-                RichiestaAttrezzatura richiestaAttrezzatura = new RichiestaAttrezzatura(numeroRacchette, numeroPalline);
+    public boolean inserimentoAttrezzatura(int numeroRacchette, int numeroPalline, Magazzino mag) {  
+        RichiestaAttrezzatura richiestaAttrezzatura = new RichiestaAttrezzatura(numeroRacchette, numeroPalline);
                 
-                Date giornoPrenotazione=nuovaPrenotazione.getGiornoPrenotazione();
-                Time oraFine=nuovaPrenotazione.getOraFine();
-                Time oraInizio=nuovaPrenotazione.getOraInizio();
+        Date giornoPrenotazione=nuovaPrenotazione.getGiornoPrenotazione();
+        Time oraFine=nuovaPrenotazione.getOraFine();
+        Time oraInizio=nuovaPrenotazione.getOraInizio();
                              
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-                String giornoPrenotazioneString = dateFormat.format(giornoPrenotazione);
-                String oraFineString = timeFormat.format(oraFine);
-                String oraInizioString = timeFormat.format(oraInizio);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String giornoPrenotazioneString = dateFormat.format(giornoPrenotazione);
+        String oraFineString = timeFormat.format(oraFine);
+        String oraInizioString = timeFormat.format(oraInizio);
 
-                String idGiorno = giornoPrenotazioneString + oraInizioString + oraFineString;            
+        String idGiorno = giornoPrenotazioneString + oraInizioString + oraFineString;            
                 
-                int racchetteTotali=mag.getracchetteTotali();
-                int pallineTotali=mag.getpallineTotali();
+        int racchetteTotali=mag.getracchetteTotali();
+        int pallineTotali=mag.getpallineTotali();
                               
               
                 
-                for(Magazzino magazzino : elencoMagazzino.values()){
-                    if(idGiorno.substring(0,10).compareTo(magazzino.getidGiorno().substring(0, 10))==0 &&
-                       ((idGiorno.substring(10,15).compareTo(magazzino.getidGiorno().substring(10,15))>=0 && idGiorno.substring(10,15).compareTo(magazzino.getidGiorno().substring(15,20))<=0) ||
-                       (idGiorno.substring(15,20).compareTo(magazzino.getidGiorno().substring(10,15))>=0 && idGiorno.substring(15,20).compareTo(magazzino.getidGiorno().substring(15,20))<=0))    
-                       ){                      
-                        //Ci sono richieste di attrezzatura nella fascia oraria richiesta, calcolo racchette e palline totali disponibili
-                        racchetteTotali=racchetteTotali-magazzino.getracchetteRichieste();
-                        pallineTotali=pallineTotali-magazzino.getpallineRichieste();
-                    } 
-                }          
-                
-                if (racchetteTotali >= numeroRacchette && pallineTotali>= numeroPalline) {
-                    // Calcola il costo dell'attrezzatura
-                    System.out.println("Attrezzature disponibili. ");
-                    costoAttrezzatura = (numeroRacchette+numeroPalline) * mag.getCostoSingoloAttrezzatura();
-                } else {
-                    System.out.println("Attrezzature non disponibili. ");
-                    System.out.println("Se vuoi continuare con la prenotazione digita 1, altrimenti digita qualsiasi altro tasto"); //Estensione 5a
-                    int scelta=0;
-                    Scanner tastiera=new Scanner(System.in);
-                    scelta=tastiera.nextInt();
-                    if(scelta==1){
-                        System.out.println("La prenotazione continua senza aggiunta di attrezzatura");
-                        costoAttrezzatura=0;
-                    }
-                    else{
-                        System.out.println("Annullamento prenotazione");
-                        costoAttrezzatura=-1.0f;
-                    }
+        for(Magazzino magazzino : elencoMagazzino.values()){
+            if(idGiorno.substring(0,10).compareTo(magazzino.getidGiorno().substring(0, 10))==0 &&
+                ((idGiorno.substring(10,15).compareTo(magazzino.getidGiorno().substring(10,15))>=0 && idGiorno.substring(10,15).compareTo(magazzino.getidGiorno().substring(15,20))<=0) ||
+                (idGiorno.substring(15,20).compareTo(magazzino.getidGiorno().substring(10,15))>=0 && idGiorno.substring(15,20).compareTo(magazzino.getidGiorno().substring(15,20))<=0))    
+                ){                      
+                //Ci sono richieste di attrezzatura nella fascia oraria richiesta, calcolo racchette e palline totali disponibili
+                racchetteTotali=racchetteTotali-magazzino.getracchetteRichieste();
+                pallineTotali=pallineTotali-magazzino.getpallineRichieste();
                 } 
+            }          
+                
+        if (racchetteTotali >= numeroRacchette && pallineTotali>= numeroPalline) {
+                System.out.println("Attrezzature disponibili. ");
                 nuovaPrenotazione.setRichiestaAttrezzatura(richiestaAttrezzatura);
-                                    
-                float costoCampo=nuovaPrenotazione.getCampoPadel().getPrezzo();
-                float costoPrenotazione=GeneraPrezzo(costoCampo, costoAttrezzatura);
-                
-                if(costoAttrezzatura==0){ //Serve per estensione 5a
-                    nuovaPrenotazione.setAttrezzaturaRichiesta(false);
-                }
-                
-                if(costoAttrezzatura==-1.0f){ //Serve per estensione 5a
-                    System.out.println("Annullamento in corso..."); 
-                    costoPrenotazione=-1.0f;
-                } 
-                
-                nuovaPrenotazione.setCostoPrenotazione(costoPrenotazione);
-                
-                if(costoAttrezzatura>0){              
-                    for(Magazzino magazzino: elencoMagazzino.values()){
+                for(Magazzino magazzino: elencoMagazzino.values()){
                         if(idGiorno.compareTo(magazzino.getidGiorno())==0){
                             String lettera = "R";
                             idGiorno=idGiorno+lettera;
@@ -319,21 +302,35 @@ public class GiocoPadel {
                             }
                         }
                     }    
-                    nuovoMagazzino=new Magazzino(idGiorno, numeroRacchette, numeroPalline);
-                }
+                nuovoMagazzino=new Magazzino(idGiorno, numeroRacchette, numeroPalline);
+                return true;
+        } 
+        
+        System.out.println("Attrezzature non disponibili. ");
+        System.out.println("Se vuoi continuare con la prenotazione digita 1, altrimenti digita qualsiasi altro tasto"); //Estensione 5a
+        int scelta=0;
+        Scanner tastiera=new Scanner(System.in);
+        scelta=tastiera.nextInt();
+        if(scelta==1){
+            System.out.println("La prenotazione continua senza aggiunta di attrezzatura");
+            richiestaAttrezzatura = new RichiestaAttrezzatura(0, 0);
+            nuovaPrenotazione.setRichiestaAttrezzatura(richiestaAttrezzatura);
+            nuovaPrenotazione.setAttrezzaturaRichiesta(false);
+            return true;
         }
+                   
+        System.out.println("Annullamento prenotazione");
+        return false;               
     }
     
-    public float GeneraPrezzo(double costoCampo, float costoAttrezzatura){ 
-         float costoPrenotazione = (float) (costoCampo + costoAttrezzatura);
-         return costoPrenotazione;
-    }
+    
+   
     
     public CampoPadel getCampoPadelById(int idCampo) {
         return elencoCampiPadel.get(idCampo);
     }
 
-    public boolean ControlloPrenotazione(int idCampo, Date giornoPrenotazione, Time oraInizio, Time oraFine) { //Rif. UC2 VerificaDisponibilita(...) 2. SD InserimentoDati
+    public boolean ControlloPrenotazione(int idCampo, Date giornoPrenotazione, Time oraInizio, Time oraFine) { 
          long durataPrenotazioneMillis = oraFine.getTime() - oraInizio.getTime();
          long dueOreMillis = 2 * 60 * 60 * 1000; // Conversione due ore in millisecondi
 
@@ -357,8 +354,7 @@ public class GiocoPadel {
         }
         else{
             System.out.println("Il costo della prenotazione ammonta a"+ nuovaPrenotazione.getCostoPrenotazione());
-           if(nuovaPrenotazione.isAttrezzaturaRichiesta()){
-              
+            if(nuovaPrenotazione.isAttrezzaturaRichiesta()){
                     elencoMagazzino.put(nuovoMagazzino.getidGiorno(), nuovoMagazzino);
                     salvaMagazzinoSuFile(nuovoMagazzino);
            }

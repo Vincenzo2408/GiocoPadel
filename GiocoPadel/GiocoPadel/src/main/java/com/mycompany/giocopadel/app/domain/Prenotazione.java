@@ -23,6 +23,9 @@ public class Prenotazione {
     private Partecipante partecipante4;
     private CampoPadel campoPadel;
     private RichiestaAttrezzatura richiestaAttrezzatura;
+    
+    private StrategiaStandard strategiaStandard;
+    private StrategiaAttrezzatura attrezzaturaStrategy;
    
 
     public Prenotazione(int idPrenotazione, boolean attrezzaturaRichiesta, Date giornoPrenotazione, Time oraInizio, Time oraFine, float costoPrenotazione) {
@@ -137,5 +140,30 @@ public class Prenotazione {
             return padeleur.getEmail();
         }
     }  
+    
+    // Metodi per impostare le strategie, Pattern GoF Strategy
+    
+    /*Questo metodo viene utilizzato per impostare la strategia di pagamento standard per la prenotazione.*/
+    public void setPagamentoStrategy(StrategiaStandard strategiaStandard) {
+        this.strategiaStandard = strategiaStandard;
+    }
+
+    /*Questo metodo viene utilizzato per impostare la strategia di calcolo del costo dell'attrezzatura per la prenotazione.*/
+    public void setAttrezzaturaStrategy(StrategiaAttrezzatura attrezzaturaStrategy) {
+        this.attrezzaturaStrategy = attrezzaturaStrategy;
+    }
+
+    // Metodo per calcolare l'importo totale della prenotazione
+    
+    /*Questo metodo calcola l'importo totale della prenotazione utilizzando la strategia di pagamento standard e, se applicabile, aggiunge il costo dell'attrezzatura calcolato utilizzando la strategia di attrezzatura.*/
+    public float calcolaImportoTotale(Magazzino magazzino) {
+         
+         float costoAttrezzatura = 0.0f;
+         if (attrezzaturaStrategy != null) {
+             costoAttrezzatura = attrezzaturaStrategy.calcolaCostoAttrezzatura(richiestaAttrezzatura, magazzino);
+         }
+
+         return strategiaStandard.calcolaImporto(campoPadel, oraInizio, oraFine) + costoAttrezzatura;
+     }
 }
 

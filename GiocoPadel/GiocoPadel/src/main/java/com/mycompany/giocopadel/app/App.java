@@ -184,18 +184,17 @@ public class App {
                         }
 
                         if (tutteLeEmailEsistenti) {
-                            giocopadel.inserisciNuovaPrenotazione(idPrenotazione, giornoPrenotazione, oraInizio, oraFine, email, email2, email3, email4, attrezzaturaRichiesta, idCampo);
                             if(attrezzaturaRichiesta){
                                System.out.println("Inserisci il numero di racchette richieste:");
                                numeroRacchette = tastiera.nextInt();
                                System.out.println("Inserisci il numero di palline richieste:");
-                               numeroPalline = tastiera.nextInt(); 
-                               giocopadel.inserimentoAttrezzatura(numeroRacchette, numeroPalline);
+                               numeroPalline = tastiera.nextInt();
+                               giocopadel.inserisciNuovaPrenotazione(idPrenotazione, giornoPrenotazione, oraInizio, oraFine, email, email2, email3, email4, attrezzaturaRichiesta, idCampo,numeroRacchette,numeroPalline);}
+                            else{
+                               giocopadel.inserisciNuovaPrenotazione(idPrenotazione, giornoPrenotazione, oraInizio, oraFine, email, email2, email3, email4, attrezzaturaRichiesta, idCampo,0,0);   
                             } 
                             
                             giocopadel.confermaNuovaPrenotazione();
-
-                           
                         } else {
                             System.out.println("Una o più email inserite non corrispondono a Padeleur registrati.");
                         }

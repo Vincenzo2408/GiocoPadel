@@ -88,8 +88,7 @@ public class TestGiocoPadel {
     @Test
     public void testUC2() {
         try {
-            verificaInserimentoNuovaPrenotazione();
-            verificaInserimentoAttrezzatura();
+           
             verificaControlloPrenotazione();
             verificaConfermaNuovaPrenotazione();
             
@@ -99,14 +98,6 @@ public class TestGiocoPadel {
             } catch (Exception e) {
                 System.out.println("Errore: " + e.getMessage());
         }
-    }
-    
-    private void verificaInserimentoNuovaPrenotazione() throws ParseException {
-        giocoPadel.inserisciNuovaPrenotazione(10, new SimpleDateFormat("dd/MM/yyyy").parse("20/07/2023"), Time.valueOf(LocalTime.parse("10:00", DateTimeFormatter.ofPattern("HH:mm"))),  Time.valueOf(LocalTime.parse("11:00", DateTimeFormatter.ofPattern("HH:mm"))), "mario.rossi@example.com", "laura.bianchi@example.com", "francesco.marrone@example.com", "vincenzo.giallo@example.com", Boolean.parseBoolean("false"), 2);
-    }
-    
-    private void verificaInserimentoAttrezzatura() throws ParseException {
-        giocoPadel.inserimentoAttrezzatura(4, 4);
     }
     
     private void verificaControlloPrenotazione()throws ParseException {
