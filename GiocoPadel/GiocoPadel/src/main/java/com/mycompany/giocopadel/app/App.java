@@ -6,6 +6,7 @@
 package com.mycompany.giocopadel.app;
 
 import com.mycompany.giocopadel.app.domain.GiocoPadel;
+import com.mycompany.giocopadel.app.domain.Observer;
 import com.mycompany.giocopadel.app.domain.Padeleur;
 
 
@@ -15,10 +16,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-
+//Pattern GoF Facade
 public class App {
     public static void main(String[] args) throws ParseException {
         GiocoPadel giocopadel = GiocoPadel.getInstance();
@@ -108,6 +110,17 @@ public class App {
     public static void padeleurMenu(GiocoPadel giocopadel, Scanner tastiera) throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     int scelta = 0;
+    
+     // Crea e registra un observer per ricevere le notifiche
+        Observer observer = new Observer() {
+            @Override
+            public void update(int idPrenotazione, List<String> emails) {
+                System.out.println("Prenotazione confermata con ID: " + idPrenotazione);
+                System.out.println("Emails dei partecipanti: " + emails);
+            }
+        };
+        giocopadel.addObserver(observer);
+        
         do {
             System.out.println("Seleziona cosa si desidera fare: \n1. Inserimento e pagamento di una prenotazione \n0. Uscita");
             try {

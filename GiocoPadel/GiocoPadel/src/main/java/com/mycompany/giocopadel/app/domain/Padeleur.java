@@ -7,7 +7,7 @@ package com.mycompany.giocopadel.app.domain;
 
 import java.util.*;
 
-public class Padeleur {
+public class Padeleur{
     private String nome;
     private String cognome;
     private String codiceFiscale;

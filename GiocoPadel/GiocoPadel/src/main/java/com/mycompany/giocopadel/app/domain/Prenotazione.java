@@ -6,8 +6,10 @@
 package com.mycompany.giocopadel.app.domain;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class Prenotazione {
@@ -26,8 +28,7 @@ public class Prenotazione {
     
     private StrategiaStandard strategiaStandard;
     private StrategiaAttrezzatura attrezzaturaStrategy;
-   
-
+      
     public Prenotazione(int idPrenotazione, boolean attrezzaturaRichiesta, Date giornoPrenotazione, Time oraInizio, Time oraFine, float costoPrenotazione) {
         this.idPrenotazione = idPrenotazione;
         this.attrezzaturaRichiesta = attrezzaturaRichiesta;

@@ -16,3 +16,5 @@
 16,true,10/08/2022,10:00,11:10,20.0,1,loredana.blu@example.com,lorenzo.lime@example.com,mario.rossi@example.com,luigi.verdi@example.com
 17,true,24/08/2020,12:00,13:15,32.5,1,mario.rossi@example.com,loredana.blu@example.com,francesco.marrone@example.com,lorenzo.lime@example.com
 18,false,24/08/2022,13:00,14:10,17.5,2,francesco.marrone@example.com,mario.rossi@example.com,luigi.verdi@example.com,vincenzo.giallo@example.com
+19,false,10/05/2021,13:45,14:20,5.8333335,1,mario.rossi@example.com,francesco.marrone@example.com,lorenzo.lime@example.com,loredana.blu@example.com
+20,false,21/05/2023,12:00,12:20,3.3333333,1,mario.rossi@example.com,loredana.blu@example.com,lorenzo.lime@example.com,francesco.marrone@example.com

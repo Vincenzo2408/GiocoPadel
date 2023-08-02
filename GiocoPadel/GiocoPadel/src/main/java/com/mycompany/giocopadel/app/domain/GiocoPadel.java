@@ -16,9 +16,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 public class GiocoPadel {
@@ -27,11 +29,23 @@ public class GiocoPadel {
     private Map<Integer, Prenotazione> elencoPrenotazioni;
     private Map<Integer, CampoPadel> elencoCampiPadel;
     private Map<String, Magazzino> elencoMagazzino;
+    
+     private List<Observer> observers = new ArrayList<>();
 
     public Padeleur nuovoPadeleur;  
     public Prenotazione nuovaPrenotazione;
     public Magazzino nuovoMagazzino;
     
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    
+     public void notifyObservers(int idPrenotazione, List<String> emails) {
+        for (Observer observer : observers) {
+            observer.update(idPrenotazione, emails);
+        }
+    }
 
     public GiocoPadel() throws ParseException{ 
         this.elencoPadeleur=new HashMap<String, Padeleur>();
@@ -176,8 +190,7 @@ public class GiocoPadel {
     }
 
     public void inserisciNuovoPadeleur(String nome, String cognome, String codiceFiscale, Date dataDiNascita, String email) { 
-        nuovoPadeleur = new Padeleur(nome, cognome, codiceFiscale, dataDiNascita, email);
-      
+        nuovoPadeleur = new Padeleur(nome, cognome, codiceFiscale, dataDiNascita, email);  
     }
 
     public void confermaNuovoPadeleur(){ 
@@ -366,8 +379,13 @@ public class GiocoPadel {
            nuovaPrenotazione.setIdPrenotazione(creazioneIndice);
            elencoPrenotazioni.put(nuovaPrenotazione.getIdPrenotazione(), nuovaPrenotazione);
            salvaPrenotazioneSuFile(nuovaPrenotazione);
-
-           System.out.println("Prenotazione confermata e salvata con successo. Id prenotazione = "+nuovaPrenotazione.getIdPrenotazione());          
+          
+           List<String> emails = new ArrayList<>();
+           emails.add(nuovaPrenotazione.getOrganizzatore().getEmail());
+           emails.add(nuovaPrenotazione.getPartecipante2().getEmail());
+           emails.add(nuovaPrenotazione.getPartecipante3().getEmail());
+           emails.add(nuovaPrenotazione.getPartecipante4().getEmail());
+           notifyObservers(nuovaPrenotazione.getIdPrenotazione(), emails);
         }
     }
     
