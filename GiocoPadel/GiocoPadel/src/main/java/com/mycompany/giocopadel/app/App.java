@@ -111,7 +111,7 @@ public class App {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     int scelta = 0;
     
-     // Crea e registra un observer per ricevere le notifiche
+     // Crea e registra un observer per ricevere le notifiche (Pattern GoF Observer)
         Observer observer = new Observer() {
             @Override
             public void update(int idPrenotazione, List<String> emails) {

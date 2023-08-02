@@ -30,21 +30,26 @@ public class GiocoPadel {
     private Map<Integer, CampoPadel> elencoCampiPadel;
     private Map<String, Magazzino> elencoMagazzino;
     
-     private List<Observer> observers = new ArrayList<>();
+    private List<Observer> observers = new ArrayList<>();
+    private PadeleurFactory padeleurFactory;
 
     public Padeleur nuovoPadeleur;  
     public Prenotazione nuovaPrenotazione;
     public Magazzino nuovoMagazzino;
     
+    //Pattern GoF Observer
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
 
-    
-     public void notifyObservers(int idPrenotazione, List<String> emails) {
+    public void notifyObservers(int idPrenotazione, List<String> emails) {
         for (Observer observer : observers) {
             observer.update(idPrenotazione, emails);
         }
+    }
+    
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
     }
 
     public GiocoPadel() throws ParseException{ 
@@ -57,6 +62,8 @@ public class GiocoPadel {
         loadCampiPadel();
         loadElencoPrenotazioni();
         loadElencoMagazzino();
+        
+        this.padeleurFactory = new DefaultPadeleurFactory();
     }
 
     public static GiocoPadel getInstance() throws ParseException{ //Pattern GoF Singleton
@@ -189,8 +196,9 @@ public class GiocoPadel {
         return false; // L'utente non esiste
     }
 
-    public void inserisciNuovoPadeleur(String nome, String cognome, String codiceFiscale, Date dataDiNascita, String email) { 
-        nuovoPadeleur = new Padeleur(nome, cognome, codiceFiscale, dataDiNascita, email);  
+    public void inserisciNuovoPadeleur(String nome, String cognome, String codiceFiscale, Date dataDiNascita, String email) {
+        //Pattern GoF Factory Method
+        nuovoPadeleur = padeleurFactory.createPadeleur(nome, cognome, codiceFiscale, dataDiNascita, email); 
     }
 
     public void confermaNuovoPadeleur(){ 
