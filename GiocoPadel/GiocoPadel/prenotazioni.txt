@@ -1,14 +1,8 @@
 1,false,18/05/2020,15:00,17:00,0,1,mario.rossi@example.com,laura.bianchi@example.com,luigi.verdi@example.com,francesco.marrone@example.com
 2,false,11/07/2023,14:30,16:30,0,2,laura.bianchi@example.com,luigi.verdi@example.com,francesco.marrone@example.com,mario.rossi@example.com
 3,false,12/07/2023,18:00,20:00,0,3,luigi.verdi@example.com,francesco.marrone@example.com,mario.rossi@example.com,laura.bianchi@example.com
-4,true,20/05/2020,15:00,17:00,25.0,2,mario.rossi@example.com,laura.bianchi@example.com,francesco.marrone@example.com,loredana.blu@example.com
-5,false,19/07/2023,12:00,12:15,2.5,1,mario.rossi@example.com,loredana.blu@example.com,luigi.verdi@example.com,vincenzo.giallo@example.com
-6,true,20/05/2020,15:15,16:20,24.0,3,vincenzo.giallo@example.com,francesco.marrone@example.com,mario.rossi@example.com,loredana.blu@example.com
 7,false,20/05/2020,15:00,16:30,10.0,1,mario.rossi@example.com,lorenzo.lime@example.com,loredana.blu@example.com,vincenzo.giallo@example.com
-8,true,22/05/2020,10:00,11:15,30.0,1,mario.rossi@example.com,loredana.blu@example.com,francesco.marrone@example.com,lorenzo.lime@example.com
 9,true,20/05/2020,11:00,12:00,20.0,2,mario.rossi@example.com,loredana.blu@example.com,lorenzo.lime@example.com,francesco.marrone@example.com
-10,true,22/05/2020,10:00,11:15,40.0,2,mario.rossi@example.com,francesco.marrone@example.com,loredana.blu@example.com,lorenzo.lime@example.com
-11,true,19/05/2020,10:00,12:00,80.0,1,mario.rossi@example.com,luigi.verdi@example.com,francesco.marrone@example.com,loredana.blu@example.com
 12,false,07/05/2020,12:00,12:15,17.0,1,mario.rossi@example.com,luigi.verdi@example.com,loredana.blu@example.com,francesco.marrone@example.com
 13,false,19/05/2020,22:00,23:00,12.0,1,mario.rossi@example.com,luigi.verdi@example.com,loredana.blu@example.com,francesco.marrone@example.com
 14,false,18/05/2020,10:00,11:15,18.75,2,francesco.marrone@example.com,mario.rossi@example.com,luigi.verdi@example.com,loredana.blu@example.com

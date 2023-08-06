@@ -28,6 +28,10 @@ public class CampoPadel {
         return prezzo;
     }
     
+    public void setPrezzo(float nuovoPrezzo){
+       this.prezzo=nuovoPrezzo;
+    }
+    
     public double getCostoCampo(Time oraInizio, Time oraFine) {
         long durataPrenotazioneMillis = oraFine.getTime() - oraInizio.getTime();
         double durataPrenotazioneOre = durataPrenotazioneMillis / (1000.0 * 60.0 * 60.0); // Conversione da millisecondi a ore

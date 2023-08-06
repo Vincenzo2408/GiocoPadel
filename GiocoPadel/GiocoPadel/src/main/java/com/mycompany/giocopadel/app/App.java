@@ -48,7 +48,7 @@ public class App {
         Map<String, Padeleur> elencoPadeleur;
 
         do {
-            System.out.println("Seleziona cosa si desidera fare: \n1. Inserire nuovo padeleur \n2. Visualizzazione padeleur \n0. Uscita");
+            System.out.println("Seleziona cosa si desidera fare: \n1. Inserire nuovo padeleur \n2. Gestione delle prenotazioni (CRUD) \n3. Conteggio partite in un campo di padel \n4. Modifica prezzi Campi Padel \n0. Uscita");
             try {
                 scelta = tastiera.nextInt();
             } catch (NumberFormatException n) {
@@ -86,8 +86,22 @@ public class App {
                         }
                     }
                     break;
-
+                    
                 case 2:
+                    System.out.println("Del progetto dovrà essere implementato (almeno):\n" +
+                    "le classi dello strato di dominio, sufficienti alla esecuzione di almeno tre casi d'uso significativi\n" +
+                    "completi (escludendo dal conteggio i casi d’uso CRUD)");
+                    break;
+                    
+                case 3:   
+                    System.out.println("Conteggio numero partite campi da padel");
+                    giocopadel.conteggioPartite();
+                    break;
+                    
+                case 4: 
+                    giocopadel.modificaPrezzi();
+                    break;
+                case 5:
                     elencoPadeleur = giocopadel.getElencoPadeleur();
                     System.out.println("Elenco dei Padeleur:");
                     for (Padeleur padeleur : elencoPadeleur.values()) {

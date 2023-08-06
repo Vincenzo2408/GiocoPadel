@@ -189,7 +189,7 @@ public class GiocoPadel {
     }
 }
 
-    public boolean verificaEsistenzaPadeleur(String email) { 
+    public boolean verificaEsistenzaPadeleur(String email) { //UC1
         for (Padeleur padeleur : elencoPadeleur.values()) {
             if (padeleur.getEmail().equals(email)) {
                 return true; // L'utente esiste già
@@ -198,12 +198,12 @@ public class GiocoPadel {
         return false; // L'utente non esiste
     }
 
-    public void inserisciNuovoPadeleur(String nome, String cognome, String codiceFiscale, Date dataDiNascita, String email) {
+    public void inserisciNuovoPadeleur(String nome, String cognome, String codiceFiscale, Date dataDiNascita, String email) { //UC1
         //Pattern GoF Factory Method
         nuovoPadeleur = padeleurFactory.createPadeleur(nome, cognome, codiceFiscale, dataDiNascita, email); 
     }
 
-    public void confermaNuovoPadeleur(){ 
+    public void confermaNuovoPadeleur(){ //UC1
         elencoPadeleur.put(nuovoPadeleur.getCodiceFiscale(), nuovoPadeleur);
         salvaPadeleurSuFile();
         System.out.println("Nuovo Padeleur inserito con successo.");
@@ -238,7 +238,7 @@ public class GiocoPadel {
         return elencoPadeleur;
     }
     
-    public void inserisciNuovaPrenotazione(int idPrenotazione, Date giornoPrenotazione, Time oraInizio,Time oraFine,String email,String email2,String email3, String email4, boolean attrezzaturaRichiesta, int idCampo, int numeroRacchette, int numeroPalline) { 
+    public void inserisciNuovaPrenotazione(int idPrenotazione, Date giornoPrenotazione, Time oraInizio,Time oraFine,String email,String email2,String email3, String email4, boolean attrezzaturaRichiesta, int idCampo, int numeroRacchette, int numeroPalline) { //UC2
         int annullamento=0;
         Padeleur organizzatore = getPadeleurByEmail(email);
         Padeleur partecipante2 = getPadeleurByEmail(email2);
@@ -299,7 +299,7 @@ public class GiocoPadel {
         return giornoPrenotazioneString + oraInizioString + oraFineString + campoPadelString; 
     }
     
-    public boolean inserimentoAttrezzatura(int numeroRacchette, int numeroPalline, Magazzino mag) {  
+    public boolean inserimentoAttrezzatura(int numeroRacchette, int numeroPalline, Magazzino mag) {  //UC2
         RichiestaAttrezzatura richiestaAttrezzatura = new RichiestaAttrezzatura(numeroRacchette, numeroPalline);
                 
         String idGiorno=creazioneidGiorno(nuovaPrenotazione);          
@@ -367,20 +367,23 @@ public class GiocoPadel {
             return true; // Il campo è disponibile
     }
     
-    public void confermaNuovaPrenotazione() {
+    public void confermaNuovaPrenotazione() { //UC2
         if(nuovaPrenotazione.getCostoPrenotazione()==-1.0f){
             System.out.println("Prenotazione annullata con successo");
         }
         else{
             if(sconto!=0){ //Modifica per UC3
-                System.out.println("Rimodulazione costo prenotazione: "+nuovaPrenotazione.getCostoPrenotazione());
+                System.out.println("Rimodulazione costo prenotazione");
                 if(nuovaPrenotazione.getCostoPrenotazione()<0){
-                    System.out.println("Riaccredito monetario ");
+                    System.out.println("Avrai un accredito monetario di: "+ -nuovaPrenotazione.getCostoPrenotazione() + " euro");
                 }
+                else
+                    System.out.println("Devi versare una cifra aggiuntiva di: "+nuovaPrenotazione.getCostoPrenotazione() + " euro");
                 sconto=0;
             }
             else
-                System.out.println("Il costo della prenotazione ammonta a"+ nuovaPrenotazione.getCostoPrenotazione());
+                System.out.println("Il costo della prenotazione ammonta a: "+ nuovaPrenotazione.getCostoPrenotazione() + " euro");
+            
             if(nuovaPrenotazione.isAttrezzaturaRichiesta()){
                     elencoMagazzino.put(nuovoMagazzino.getidGiorno(), nuovoMagazzino);
                     salvaMagazzinoSuFile(nuovoMagazzino);
@@ -434,15 +437,15 @@ public class GiocoPadel {
     }  
 
     
-    public boolean modificaPrenotazione() {
+    public boolean modificaPrenotazione() { //UC3
         System.out.println("Inserisci ID della prenotazione da modificare");
         int idPrenotazioneDaModificare=tastiera.nextInt();
         
         Prenotazione prenotazioneDaModificare = elencoPrenotazioni.get(idPrenotazioneDaModificare);
         sconto=prenotazioneDaModificare.getCostoPrenotazione();
+        System.out.println("Per la prenotazione avevi speso: "+sconto + "euro che ti verranno decurtati nella modifica prenotazione");
         
         if(prenotazioneDaModificare != null){
-            System.out.println("Prenotazione da modificare: \n"+ prenotazioneDaModificare);
             elencoPrenotazioni.remove(prenotazioneDaModificare);
             rimuoviPrenotazioneDaFile(idPrenotazioneDaModificare);
             if(prenotazioneDaModificare.isAttrezzaturaRichiesta()){
@@ -456,14 +459,12 @@ public class GiocoPadel {
         return false;
     }
 
-    public boolean rimuoviPrenotazione() {
+    public boolean rimuoviPrenotazione() { //UC3
         System.out.println("Inserisci ID della prenotazione da rimuovere");
         int idPrenotazioneDaRimuovere=tastiera.nextInt();
         
         Prenotazione prenotazioneDaRimuovere = elencoPrenotazioni.get(idPrenotazioneDaRimuovere);
         if(prenotazioneDaRimuovere != null){
-            
-            System.out.println("Prenotazione da rimuovere: \n"+ prenotazioneDaRimuovere);
             elencoPrenotazioni.remove(prenotazioneDaRimuovere);
             rimuoviPrenotazioneDaFile(idPrenotazioneDaRimuovere);
             if(prenotazioneDaRimuovere.isAttrezzaturaRichiesta()){
@@ -474,16 +475,22 @@ public class GiocoPadel {
             }
             
             Date oggi = new Date();
-            long differenzaTempo = prenotazioneDaRimuovere.getGiornoPrenotazione().getTime() - oggi.getTime();
+            long differenzaTempo = prenotazioneDaRimuovere.getGiornoPrenotazione().getTime()-oggi.getTime();
+ 
             long dueGiorniMillis = 48 * 60 * 60 * 1000; //48 ore in millisecondi
-            if (differenzaTempo > dueGiorniMillis) {
-                System.out.println("Hai diritto al rimborso completo pari a " +prenotazioneDaRimuovere.getCostoPrenotazione()+ "euro.");
-            } else {
-            // Rimborso del 70% per la regola di dominio R4
-            float rimborso = prenotazioneDaRimuovere.getCostoPrenotazione() * 0.7f;
-            System.out.println("Hai diritto a un rimborso del 70% pari a " + rimborso + " euro.");
-            }
             
+            if(prenotazioneDaRimuovere.getCostoPrenotazione()>0){
+                if (differenzaTempo > dueGiorniMillis) {
+                    System.out.println("Hai diritto al rimborso completo pari a " +prenotazioneDaRimuovere.getCostoPrenotazione()+ "euro.");
+                } else {
+                // Rimborso del 70% per la regola di dominio R4
+                float rimborso = prenotazioneDaRimuovere.getCostoPrenotazione() * 0.7f;
+                System.out.println("Hai diritto a un rimborso del 70% pari a " + rimborso + " euro.");
+                }
+            }
+            else{
+                System.out.println("Hai una prenotazione in cui hai già avuto un riaccredito poiché hai modificato la prenotazione avendo diritto ad uno sconto");
+            }
             return true;
         }
         return false;
@@ -521,7 +528,7 @@ public class GiocoPadel {
         List<String> righeDaMantenere = new ArrayList<>();
         
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("magazzino.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader("magazzini.txt"));
             String riga;
             while ((riga = reader.readLine()) != null) {
                 String[] campi = riga.split(",");
@@ -532,7 +539,72 @@ public class GiocoPadel {
             }
             reader.close();
 
-            BufferedWriter writer = new BufferedWriter(new FileWriter("magazzino.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("magazzini.txt"));
+            for (String rigaDaScrivere : righeDaMantenere) {
+                writer.write(rigaDaScrivere);
+                writer.newLine();
+            }
+            writer.close();
+            
+        } catch (IOException e) {
+            System.out.println("Errore durante la rimozione della prenotazione dal file: " + e.getMessage());
+        
+        }
+    }
+
+    public void conteggioPartite() { //UC5
+        int conteggio=0;
+        System.out.println("Inserisci identificativo del campo di Padel di cui vuoi conoscere quante partite sono state effettuate"); 
+        int idCampo=tastiera.nextInt();
+        if(idCampo>0 && idCampo<4){
+            for(Prenotazione prenotazione: elencoPrenotazioni.values()){
+                if(prenotazione.getCampoPadel().getIdCampo()==idCampo){
+                    conteggio++;
+                }
+            }
+            System.out.println("Il numero di partite effettuate nel campo " + idCampo + "è: " + conteggio);
+        }
+        else
+            System.out.println("Inserimento errato del campo");
+    }
+    
+    public void modificaPrezzi(){ //UC6
+        System.out.println("Di quale campo di padel vuoi modificare il prezzo?");
+        int idCampo=tastiera.nextInt();
+        if(idCampo>0 && idCampo<4){
+            for(CampoPadel campoPadel: elencoCampiPadel.values()){
+                if(campoPadel.getIdCampo()==idCampo){
+                    System.out.println("Nuovo prezzo: ");
+                    float nuovoPrezzo=tastiera.nextFloat();
+                    campoPadel.setPrezzo(nuovoPrezzo);
+                    modificaCostoFile(idCampo, nuovoPrezzo);
+                }
+            }
+        }
+        else 
+            System.out.println("Inserimento errato del campo");
+    }
+    
+    public void modificaCostoFile(int idCampo, float nuovoPrezzo){
+        List<String> righeDaMantenere = new ArrayList<>();
+        
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("campi.txt"));
+            String riga;
+            while ((riga = reader.readLine()) != null) {
+                String[] campi = riga.split(",");
+                float idCampoDaModificare = Float.parseFloat(campi[0]);
+                if (idCampoDaModificare!=idCampo) {
+                    righeDaMantenere.add(riga);
+                }
+                else{
+                    String Nuovariga=Integer.toString(idCampo)+","+Float.toString(nuovoPrezzo);
+                    righeDaMantenere.add(Nuovariga);
+                }
+            }
+            reader.close();
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter("campi.txt"));
             for (String rigaDaScrivere : righeDaMantenere) {
                 writer.write(rigaDaScrivere);
                 writer.newLine();
