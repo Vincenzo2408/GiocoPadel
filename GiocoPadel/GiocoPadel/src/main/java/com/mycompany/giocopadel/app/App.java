@@ -122,7 +122,7 @@ public class App {
         giocopadel.addObserver(observer);
         
         do {
-            System.out.println("Seleziona cosa si desidera fare: \n1. Inserimento e pagamento di una prenotazione \n0. Uscita");
+            System.out.println("Seleziona cosa si desidera fare: \n1. Inserimento e pagamento di una prenotazione \n2. Modifica/Annullamento di una prenotazione \n0. Uscita");
             try {
                 scelta = tastiera.nextInt();
             } catch (NumberFormatException n) {
@@ -216,7 +216,113 @@ public class App {
                     }
                     break;
 
-              
+                case 2://UC2
+                    int modifica=0;
+                    System.out.println("Si desidera modificare o annullare la prenotazione? 1. Modificare 2. Annullare");
+                    modifica=tastiera.nextInt();
+                    
+                    switch(modifica){
+                        case 1:
+                            if(giocopadel.modificaPrenotazione()){
+                                System.out.println("Riinserisci dati, al termine della procedura ti verrà restituito un nuovo IdPrenoazione");
+                                System.out.println("----------------------");
+                                System.out.println("Inserisci email del Padeleur:");
+                                email = tastiera.next();
+                 
+                                if (giocopadel.verificaEsistenzaPadeleur(email)) {
+                                    boolean tutteLeEmailEsistenti = true;
+
+                                    // Richiesta delle email dei partecipanti 2, 3 e 4
+                                    System.out.println("Inserisci email del partecipante 2:");
+                                    String email2 = tastiera.next();
+                                    System.out.println("Inserisci email del partecipante 3:");
+                                    String email3 = tastiera.next();
+                                    System.out.println("Inserisci email del partecipante 4:");
+                                    String email4 = tastiera.next();
+
+                                    int idPrenotazione;
+                                    boolean attrezzaturaRichiesta;
+                                    Date giornoPrenotazione;
+                                    Time oraInizio;
+                                    Time oraFine;
+                                    int idCampo;
+                                    int controlloprenotazione;
+
+                                    idPrenotazione = 0;
+                                    System.out.println("Richiesta attrezzatura (true/false):");
+                                    attrezzaturaRichiesta = tastiera.nextBoolean();
+
+                                    do{
+                                        controlloprenotazione=0;
+                                        System.out.println("Inserisci giorno della prenotazione (dd/MM/yyyy):");
+                                        giornoPrenotazione = sdf.parse(tastiera.next());
+                                        System.out.println("Inserisci ora di inizio (HH:mm):");
+                                        String oraInizioString = tastiera.next();
+                                        LocalTime localTimeInizio = LocalTime.parse(oraInizioString, DateTimeFormatter.ofPattern("HH:mm"));
+                                        oraInizio = Time.valueOf(localTimeInizio);
+
+                                        System.out.println("Inserisci ora di fine (HH:mm):");
+                                        String oraFineString = tastiera.next();
+                                        LocalTime localTimeFine = LocalTime.parse(oraFineString, DateTimeFormatter.ofPattern("HH:mm"));
+                                        oraFine = Time.valueOf(localTimeFine);
+
+                                        System.out.println("Inserisci campo");
+                                        idCampo = tastiera.nextInt();
+
+                                        if (!giocopadel.ControlloPrenotazione(idCampo, giornoPrenotazione, oraInizio, oraFine)) {
+                                            //Estensione 3a e 3b
+                                            System.out.println("Riselezionamento:");
+                                            controlloprenotazione=1;
+                                        }
+                                    }while(controlloprenotazione!=0);  
+
+                                    String[] emailPartecipanti = { email2, email3, email4 };
+                                        for (String emailPartecipante : emailPartecipanti) {
+                                            if (!giocopadel.verificaEsistenzaPadeleur(emailPartecipante)) {
+                                                tutteLeEmailEsistenti = false;
+
+                                                System.out.println("Padeleur non registrato:"+ emailPartecipante);                              
+                                            }
+                                        }
+
+                                    if (tutteLeEmailEsistenti) {
+                                        if(attrezzaturaRichiesta){
+                                            System.out.println("Inserisci il numero di racchette richieste:");
+                                            numeroRacchette = tastiera.nextInt();
+                                            System.out.println("Inserisci il numero di palline richieste:");
+                                            numeroPalline = tastiera.nextInt();
+                                            giocopadel.inserisciNuovaPrenotazione(idPrenotazione, giornoPrenotazione, oraInizio, oraFine, email, email2, email3, email4, attrezzaturaRichiesta, idCampo,numeroRacchette,numeroPalline);
+                                        }
+                                        else{
+                                            giocopadel.inserisciNuovaPrenotazione(idPrenotazione, giornoPrenotazione, oraInizio, oraFine, email, email2, email3, email4, attrezzaturaRichiesta, idCampo,0,0);   
+                                        } 
+                                    giocopadel.confermaNuovaPrenotazione();
+                                    
+                                    } 
+                                    else {
+                                        System.out.println("Una o più email inserite non corrispondono a Padeleur registrati.");
+                                    }
+                                } else {
+                                    System.out.println("Non sei registrato nel sistema");
+                                }
+                            }
+                            break;
+                        
+                        case 2:
+                            if(giocopadel.rimuoviPrenotazione()){
+                                System.out.println("Rimozione avvenuta con successo");
+                            }
+                            else 
+                                System.out.println("Errore durante la rimozione, ricontrollare i dati inseriti");
+                            break;
+                        
+                        default: 
+                            System.out.println("Scelta non valida");
+                            break;
+                    }
+                    break;
+                    
+                    
                 default:
                     System.out.println("Scelta non valida.");
                     break;
