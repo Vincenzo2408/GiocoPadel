@@ -230,7 +230,7 @@ public class App {
                     }
                     break;
 
-                case 2://UC2
+                case 2://UC3
                     int modifica=0;
                     System.out.println("Si desidera modificare o annullare la prenotazione? 1. Modificare 2. Annullare");
                     modifica=tastiera.nextInt();

@@ -26,8 +26,8 @@ import java.util.Scanner;
 public class GiocoPadel {
     float sconto=0;
     Scanner tastiera=new Scanner(System.in);
-    public static GiocoPadel giocopadel;
-    public Map<String, Padeleur> elencoPadeleur;
+    private static GiocoPadel giocopadel;
+    private Map<String, Padeleur> elencoPadeleur;
     private Map<Integer, Prenotazione> elencoPrenotazioni;
     private Map<Integer, CampoPadel> elencoCampiPadel;
     private Map<String, Magazzino> elencoMagazzino;
@@ -54,7 +54,7 @@ public class GiocoPadel {
         observers.remove(observer);
     }
 
-    public GiocoPadel() throws ParseException{ 
+    public GiocoPadel() { 
         this.elencoPadeleur=new HashMap<String, Padeleur>();
         this.elencoPrenotazioni = new HashMap<Integer, Prenotazione>();
         this.elencoCampiPadel = new HashMap<Integer, CampoPadel>();
@@ -68,13 +68,13 @@ public class GiocoPadel {
         this.padeleurFactory = new DefaultPadeleurFactory();
     }
 
-    public static GiocoPadel getInstance() throws ParseException{ //Pattern GoF Singleton
+    public static GiocoPadel getInstance() { //Pattern GoF Singleton
             if(giocopadel==null) giocopadel=new GiocoPadel();
             return giocopadel;
     }
 
     /*Creazione dell'elencoPadeleur*/
-    public void loadElencoPadeleur() throws ParseException {
+    public void loadElencoPadeleur() {
         try {
             BufferedReader bfElencoPadeleur = new BufferedReader(new FileReader("padeleur.txt"));
             String linea;
@@ -100,6 +100,7 @@ public class GiocoPadel {
 
             }
             bfElencoPadeleur.close();
+            System.out.println("Caricamento dei padeleur completato con successo");
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
@@ -605,6 +606,34 @@ public class GiocoPadel {
             reader.close();
 
             BufferedWriter writer = new BufferedWriter(new FileWriter("campi.txt"));
+            for (String rigaDaScrivere : righeDaMantenere) {
+                writer.write(rigaDaScrivere);
+                writer.newLine();
+            }
+            writer.close();
+            
+        } catch (IOException e) {
+            System.out.println("Errore durante la rimozione della prenotazione dal file: " + e.getMessage());
+        
+        }
+    }
+
+    public void rimuoviPadeleur(String email) {
+         List<String> righeDaMantenere = new ArrayList<>();
+        
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("padeleur.txt"));
+            String riga;
+            while ((riga = reader.readLine()) != null) {
+                String[] campi = riga.split(",");
+                String idEmail = campi[4];
+                if (!idEmail.equals(email)) {
+                    righeDaMantenere.add(riga);
+                }
+            }
+            reader.close();
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter("padeleur.txt"));
             for (String rigaDaScrivere : righeDaMantenere) {
                 writer.write(rigaDaScrivere);
                 writer.newLine();

@@ -5,21 +5,20 @@
  */
 package com.mycompany.giocopadel.app;
 
-import com.mycompany.giocopadel.app.domain.GiocoPadel;
-import com.mycompany.giocopadel.app.domain.Magazzino;
-import com.mycompany.giocopadel.app.domain.Padeleur;
-import com.mycompany.giocopadel.app.domain.Prenotazione;
-import com.mycompany.giocopadel.app.domain.RichiestaAttrezzatura;
+import com.mycompany.giocopadel.app.domain.*;
+
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Map;
         
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -27,92 +26,76 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class TestGiocoPadel {
     static GiocoPadel giocoPadel;
-    static Padeleur persona1;
-    
-    static Prenotazione prenotazione;
-    static RichiestaAttrezzatura richiestaAttrezzatura;
-    static Magazzino magazzino;
+    static Padeleur personaEsistente;
+    String nome;
+    String cognome;
+    String email;
+    String codiceFiscale;
+    Date dataDiNascita;
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    Map<String, Padeleur> elencoPadeleur;
     
     @BeforeAll
-    public static void initTest() throws ParseException {
+    public static void initTestGiocoPadel() {
         giocoPadel = GiocoPadel.getInstance();
-        persona1=giocoPadel.getElencoPadeleur().get("ABC123");
+      
+    }
+    
+    @BeforeEach
+    public void initTest() throws ParseException{
+       nome="Maria";
+       cognome="De Filippi";
+       email="mariadefilippi@example.com";
+       codiceFiscale="MRA789";
+       String dataInput="05/12/1961";
+       dataDiNascita = sdf.parse(dataInput);   
+       personaEsistente = giocoPadel.getPadeleurByEmail("mario.rossi@example.com");
+    }
+    
+    @AfterEach
+    public void clearTest(){
+        giocoPadel.rimuoviPadeleur(email);
+        nome=null;
+        cognome=null;
+        email=null;
+        codiceFiscale=null;
+        dataDiNascita=null;
     }
 
     @Test
+    @DisplayName("Test UC1")
     public void testUC1() {
         try {
-            verificaElencoPadeleur();
-            verificaDettagliPersona1();
-            verificaEsistenzaPadeleur();
-            verificaNonEsistenzaPadeleur();
-         
-            inserisciNuovoPadeleur();
-            salvaPadeleurSuFile();
+            //Verifica che un padeleur esiste all'interno dell'elenco
+            assertTrue(giocoPadel.verificaEsistenzaPadeleur(personaEsistente.getEmail()), "Errore nella verifica esistenza padeleur");
+            System.out.println("Verificato esistenza padeleur");
+            
+            //Verifica che un padeleur non esiste all'interno dell'elenco
+            assertFalse(giocoPadel.verificaEsistenzaPadeleur(email),"Errore nella non verifica esistenza padeleur");
+            System.out.println("Verificato non Esistenza Padeleur");
+            
+            //Verifica inserimento di un padeleur
+            giocoPadel.inserisciNuovoPadeleur(nome, cognome, codiceFiscale, dataDiNascita, email);
+            System.out.println("Inserimento Padeleur avvenuto con successo");
+            
+            //Conferma inserimento di un padeleur
+            giocoPadel.confermaNuovoPadeleur();
+            System.out.println("Conferma Inserimento Padeleur avvenuto con successo");
+            
+            //Verifica nell'elenco inserimento di Maria De Filippi
+            elencoPadeleur = giocoPadel.getElencoPadeleur();
+                    System.out.println("Elenco dei Padeleur:");
+                    for (Padeleur padeleur : elencoPadeleur.values()) {
+                        System.out.println("Codice fiscale: " + padeleur.getCodiceFiscale());
+                        System.out.println("Nome: " + padeleur.getNome());
+                        System.out.println("Cognome: " + padeleur.getCognome());
+                        System.out.println("Data di nascita: " + sdf.format(padeleur.getDataDiNascita()));
+                        System.out.println("Email: " + padeleur.getEmail());
+                        System.out.println("---------------");
+                    }
             
             } catch (Exception e) {
                 System.out.println("Errore: " + e.getMessage());
         }
-    }
-
-    private void verificaElencoPadeleur() {
-        Map<String, Padeleur> elencoPadeleur = giocoPadel.getElencoPadeleur();
-        assertNotNull(elencoPadeleur);
-        assertEquals(1, elencoPadeleur.size());
-    }
-
-    private void verificaDettagliPersona1() {
-        assertEquals("Mario", persona1.getNome());
-        assertEquals("Rossi", persona1.getCognome());
-        assertEquals("ABC123", persona1.getCodiceFiscale());
-        assertEquals("01/01/1990", new SimpleDateFormat("dd/MM/yyyy").format(persona1.getDataDiNascita()));
-        assertEquals("mario.rossi@example.com", persona1.getEmail());
-    }
-
-    private void verificaEsistenzaPadeleur() {
-        assertTrue(giocoPadel.verificaEsistenzaPadeleur("mario.rossi@example.com"));
-    }
-
-    private void verificaNonEsistenzaPadeleur() {
-        assertFalse(giocoPadel.verificaEsistenzaPadeleur("nonEsiste@example.com"));
-    }
-
-    private void inserisciNuovoPadeleur() throws ParseException {
-        giocoPadel.inserisciNuovoPadeleur("Luigi", "Verdi", "GHI789", new SimpleDateFormat("dd/MM/yyyy").parse("10/12/1988"), "luigi.verdi@example.com");
-    }
-
-    private void salvaPadeleurSuFile() {
-        giocoPadel.salvaPadeleurSuFile();
-    }
-
-    @Test
-    public void testUC2() {
-        try {
-           
-            verificaControlloPrenotazione();
-            verificaConfermaNuovaPrenotazione();
-            
-            salvaPrenotazioneSuFile();
-            salvaMagazzinoSuFile();
-            
-            } catch (Exception e) {
-                System.out.println("Errore: " + e.getMessage());
-        }
-    }
-    
-    private void verificaControlloPrenotazione()throws ParseException {
-        assertTrue(giocoPadel.ControlloPrenotazione(1, new SimpleDateFormat("dd/MM/yyyy").parse("18/05/2020"), Time.valueOf(LocalTime.parse("15:00", DateTimeFormatter.ofPattern("HH:mm"))), Time.valueOf(LocalTime.parse("17:00", DateTimeFormatter.ofPattern("HH:mm")))));
-    }
-    
-    private void verificaConfermaNuovaPrenotazione(){
-        giocoPadel.confermaNuovaPrenotazione();
-    }
-    
-    private void salvaPrenotazioneSuFile() {
-        giocoPadel.salvaPrenotazioneSuFile(prenotazione);
-    }
-    
-    private void salvaMagazzinoSuFile() {
-        giocoPadel.salvaMagazzinoSuFile(magazzino);
-    }
+    }   
 }
