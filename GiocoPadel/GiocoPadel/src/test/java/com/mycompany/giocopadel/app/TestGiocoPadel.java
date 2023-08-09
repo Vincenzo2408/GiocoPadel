@@ -63,9 +63,9 @@ public class TestGiocoPadel {
        dataDiNascita = sdf.parse(dataInput);   
        personaEsistente = giocoPadel.getPadeleurByEmail("mario.rossi@example.com");
        
-       email2 = "barbaradurso@example.com";
-       email3 = "francescomeli@example.com";
-       email4 = "vincenzomicieli@example.com";
+       email2 = "loredana.blu@example.com";
+       email3 = "francesco.marrone@example.com";
+       email4 = "luigi.verdi@example.com";
        String dataPrenotazione = "08/08/2023";
        giornoPrenotazione = sdf.parse(dataPrenotazione);
        String oraInizioString = "15:40";
@@ -75,13 +75,14 @@ public class TestGiocoPadel {
        LocalTime localTimeFine = LocalTime.parse(oraFineString, DateTimeFormatter.ofPattern("HH:mm"));
        oraFine = Time.valueOf(localTimeFine);
        idCampo = 2;
-       idPrenotazione = 22;
+       idPrenotazione=0;
        numeroRacchette = 4;
        numeroPalline = 4;
     }
     
     @AfterEach
     public void clearTest(){
+        giocoPadel.rimuoviPrenotazioneDaFile(idPrenotazione);
         giocoPadel.rimuoviPadeleur(email);
         nome = null;
         cognome = null;
@@ -120,7 +121,8 @@ public class TestGiocoPadel {
             //Conferma inserimento di un padeleur
             giocoPadel.confermaNuovoPadeleur();
             System.out.println("Conferma Inserimento Padeleur avvenuto con successo");
-            
+           
+         
             
             //Verifica nell'elenco inserimento di Maria De Filippi
             elencoPadeleur = giocoPadel.getElencoPadeleur();
@@ -146,7 +148,7 @@ public class TestGiocoPadel {
             //La verifica tramite email che un padeleur esiste o non esiste all'interno dell'elenco è stata effettuata nell'UC1
             
             //Verifica controllo di una prenotazione
-            giocoPadel.ControlloPrenotazione(idCampo, giornoPrenotazione, oraInizio, oraFine);
+            assertTrue(giocoPadel.ControlloPrenotazione(idCampo, giornoPrenotazione, oraInizio, oraFine));
             System.out.println("Controllo Prenotazione avvenuta con successo");
             
             //Verifica inserimento di una nuova prenotazione
@@ -163,8 +165,11 @@ public class TestGiocoPadel {
             giocoPadel.confermaNuovaPrenotazione();
             System.out.println("Conferma Inserimento Prenotazione avvenuto con successo");
             
+            
             //Verifica nell'elenco inserimento della prenotazione
             elencoPrenotazioni = giocoPadel.getElencoPrenotazioni();
+            
+            System.out.println(elencoPrenotazioni);
                     System.out.println("Elenco delle prenotazioni:");
                     for (Prenotazione prenotazione : elencoPrenotazioni.values()) {
                         System.out.println("Id prenotazione: " + prenotazione.getIdPrenotazione());
@@ -173,13 +178,16 @@ public class TestGiocoPadel {
                         System.out.println("Ora Inizio: " + prenotazione.getOraInizio());
                         System.out.println("Ora Fine: " + prenotazione.getOraFine());
                         System.out.println("Costo Prenotazione: " + prenotazione.getCostoPrenotazione());
-                        System.out.println("Email 1: " + prenotazione.getOrganizzatore());
-                        System.out.println("Email 2: " + prenotazione.getPartecipante2());
-                        System.out.println("Email 3: " + prenotazione.getPartecipante3());
-                        System.out.println("Email 4: " + prenotazione.getPartecipante4());
+                        System.out.println("Email 1: " + prenotazione.getOrganizzatore().getEmail());
+                        System.out.println("Email 2: " + prenotazione.getPartecipante2().getEmail());
+                        System.out.println("Email 3: " + prenotazione.getPartecipante3().getEmail());
+                        System.out.println("Email 4: " + prenotazione.getPartecipante4().getEmail());
                         System.out.println("Id campo: " + prenotazione.getCampoPadel());
                         System.out.println("---------------");
-                    }    
+                        
+                        idPrenotazione=prenotazione.getIdPrenotazione();
+                    }   
+                    
             } catch (Exception e) {
                 System.out.println("Errore: " + e.getMessage());
         }
