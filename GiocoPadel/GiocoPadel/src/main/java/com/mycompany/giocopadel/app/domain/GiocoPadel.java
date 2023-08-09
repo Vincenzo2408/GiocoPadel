@@ -443,10 +443,10 @@ public class GiocoPadel {
         int idPrenotazioneDaModificare=tastiera.nextInt();
         
         Prenotazione prenotazioneDaModificare = elencoPrenotazioni.get(idPrenotazioneDaModificare);
-        sconto=prenotazioneDaModificare.getCostoPrenotazione();
-        System.out.println("Per la prenotazione avevi speso: "+sconto + "euro che ti verranno decurtati nella modifica prenotazione");
         
         if(prenotazioneDaModificare != null){
+            sconto=prenotazioneDaModificare.getCostoPrenotazione();
+            System.out.println("Per la prenotazione avevi speso: "+sconto + "euro che ti verranno decurtati nella modifica prenotazione");
             elencoPrenotazioni.remove(prenotazioneDaModificare);
             rimuoviPrenotazioneDaFile(idPrenotazioneDaModificare);
             if(prenotazioneDaModificare.isAttrezzaturaRichiesta()){
@@ -644,5 +644,10 @@ public class GiocoPadel {
             System.out.println("Errore durante la rimozione della prenotazione dal file: " + e.getMessage());
         
         }
+    }
+    
+    //Funzioni necessarie per testing
+    public Map<Integer, Prenotazione> getElencoPrenotazioni() {
+        return elencoPrenotazioni;
     }
 }
