@@ -10,8 +10,8 @@ package com.mycompany.giocopadel.app.domain;
 public class RichiestaAttrezzatura {
     private int numeroRacchette;
     private int numeroPalline;
-    private float costoTotaleAttrezzatura;
-    private Magazzino magazzino;
+  
+  
 
     public RichiestaAttrezzatura(int numeroRacchette, int numeroPalline) {
         this.numeroRacchette = numeroRacchette;
@@ -26,8 +26,6 @@ public class RichiestaAttrezzatura {
         return numeroPalline;
     }
 
-    public float getCostoTotaleAttrezzatura() {
-        return costoTotaleAttrezzatura;
-    }
+  
 }
 

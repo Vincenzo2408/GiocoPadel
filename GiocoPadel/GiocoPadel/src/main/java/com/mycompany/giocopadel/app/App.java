@@ -93,14 +93,16 @@ public class App {
                     "completi (escludendo dal conteggio i casi d’uso CRUD)");
                     break;
                     
-                case 3:   
+                case 3: //UC5   
                     System.out.println("Conteggio numero partite campi da padel");
                     giocopadel.conteggioPartite();
                     break;
                     
-                case 4: 
+                case 4: // UC6
+                    System.out.println("Modifica prezzi campi da padel");
                     giocopadel.modificaPrezzi();
                     break;
+                    
                 case 5:
                     elencoPadeleur = giocopadel.getElencoPadeleur();
                     System.out.println("Elenco dei Padeleur:");

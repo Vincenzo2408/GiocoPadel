@@ -24,9 +24,7 @@ public class CampoPadel {
         return idCampo;
     }
 
-    public float getPrezzo() {
-        return prezzo;
-    }
+    
     
     public void setPrezzo(float nuovoPrezzo){
        this.prezzo=nuovoPrezzo;
