@@ -47,6 +47,8 @@ public class TestGiocoPadel {
     int numeroRacchette;
     int numeroPalline;
     Map<Integer, Prenotazione> elencoPrenotazioni;
+    Magazzino magazzino;
+
     
     @BeforeAll
     public static void initTestGiocoPadel() {
@@ -78,6 +80,7 @@ public class TestGiocoPadel {
        idPrenotazione=0;
        numeroRacchette = 4;
        numeroPalline = 4;
+       magazzino = new Magazzino("0",0,0);
     }
     
     @AfterEach
@@ -100,6 +103,7 @@ public class TestGiocoPadel {
         idPrenotazione = 0;
         numeroRacchette = 0;
         numeroPalline = 0;
+        magazzino = null;
     }
 
     @Test
@@ -122,7 +126,6 @@ public class TestGiocoPadel {
             giocoPadel.confermaNuovoPadeleur();
             System.out.println("Conferma Inserimento Padeleur avvenuto con successo");
            
-         
             
             //Verifica nell'elenco inserimento di Maria De Filippi
             elencoPadeleur = giocoPadel.getElencoPadeleur();
@@ -140,7 +143,6 @@ public class TestGiocoPadel {
         }
     }   
     
-    
     @Test
     @DisplayName("Test UC2")
     public void testUC2() {
@@ -155,6 +157,9 @@ public class TestGiocoPadel {
             //Caso attrezzaturaRichiesta = true
             giocoPadel.inserisciNuovaPrenotazione(idPrenotazione, giornoPrenotazione, oraInizio, oraFine, email, email2, email3, email4, true, idCampo, numeroRacchette, numeroPalline);
             System.out.println("Inserimento Prenotazione avvenuto con successo");
+            giocoPadel.inserimentoAttrezzatura(numeroRacchette, numeroPalline, magazzino);
+            System.out.println("Inserimento Attrezzatura avvenuto con successo");
+
             
             //Verifica inserimento di una nuova prenotazione
             //Caso attrezzaturaRichiesta = false

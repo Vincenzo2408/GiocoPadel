@@ -361,7 +361,7 @@ public class GiocoPadel {
         
         for (Prenotazione prenotazione : elencoPrenotazioni.values()) {
             if (prenotazione.getCampoPadel().getIdCampo() == idCampo && prenotazione.getGiornoPrenotazione().equals(giornoPrenotazione) && !(oraFine.compareTo(prenotazione.getOraInizio()) <= 0 || oraInizio.compareTo(prenotazione.getOraFine()) >= 0)) {
-                 System.out.println("Il campo nel giorno e nella fascia inserita è già occupato.");
+                System.out.println("Il campo nel giorno e nella fascia inserita è già occupato.");
                 return false; // Il campo è occupato
             }
         }
