@@ -31,6 +31,7 @@ public class TestGiocoPadel {
     String cognome;
     String email;
     String codiceFiscale;
+   
     Date dataDiNascita;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     Map<String, Padeleur> elencoPadeleur;
@@ -110,23 +111,29 @@ public class TestGiocoPadel {
     @DisplayName("Test UC1")
     public void testUC1() {
         try {
+            
             //Verifica che un padeleur esiste all'interno dell'elenco
-            assertTrue(giocoPadel.verificaEsistenzaPadeleur(personaEsistente.getEmail()), "Errore nella verifica esistenza padeleur");
-            System.out.println("Verificato esistenza padeleur");
+            System.out.println("1.1 Verifica esistena del padeleur" + personaEsistente.getEmail());
+            assertTrue(giocoPadel.verificaEsistenzaPadeleur(personaEsistente.getEmail()), "1.1: Errore nella verifica esistenza padeleur");
+            System.out.println("1.1: Il padeleur esiste in elenco");
+            System.out.println("----------------------------------------------------------------------");
             
             //Verifica che un padeleur non esiste all'interno dell'elenco
-            assertFalse(giocoPadel.verificaEsistenzaPadeleur(email),"Errore nella non verifica esistenza padeleur");
-            System.out.println("Verificato non Esistenza Padeleur");
+            System.out.println("1.2 Verifica di non esistenza del padeleur "+ email);
+            assertFalse(giocoPadel.verificaEsistenzaPadeleur(email),"1.2: Errore nella non verifica esistenza padeleur");
+            System.out.println("1.2: Il padeleur non esiste in elenco");
+            System.out.println("----------------------------------------------------------------------");
             
             //Verifica inserimento di un padeleur
+            System.out.println("1.3 Verifica l'inserimento corretto di un Padeleur con i seguenti dati: "+ nome + " "+ cognome + " "+ codiceFiscale + " " + dataDiNascita + " " + email);
             giocoPadel.inserisciNuovoPadeleur(nome, cognome, codiceFiscale, dataDiNascita, email);
-            System.out.println("Inserimento Padeleur avvenuto con successo");
+            System.out.println("1.3: Inserimento Padeleur avvenuto con successo");
+            System.out.println("----------------------------------------------------------------------");
             
             //Conferma inserimento di un padeleur
+            System.out.println("1.4 Verifica l'inserimento del padeleur precedente in elenco");
             giocoPadel.confermaNuovoPadeleur();
-            System.out.println("Conferma Inserimento Padeleur avvenuto con successo");
-           
-            
+            System.out.println("1.4 Conferma Inserimento Padeleur avvenuto con successo");
             //Verifica nell'elenco inserimento di Maria De Filippi
             elencoPadeleur = giocoPadel.getElencoPadeleur();
                     System.out.println("Elenco dei Padeleur:");
@@ -138,6 +145,8 @@ public class TestGiocoPadel {
                         System.out.println("Email: " + padeleur.getEmail());
                         System.out.println("---------------");
                     }
+            System.out.println("----------------------------------------------------------------------");
+            
             } catch (Exception e) {
                 System.out.println("Errore: " + e.getMessage());
         }
