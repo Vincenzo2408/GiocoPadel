@@ -197,4 +197,48 @@ public class TestGiocoPadel {
                 System.out.println("Errore: " + e.getMessage());
         }
     }   
+    
+    @Test
+    @DisplayName("Test UC3")
+    public void testUC3() {
+        try {
+            //La verifica tramite email che un padeleur esiste o non esiste all'interno dell'elenco è stata effettuata nell'UC1
+            //La verifica che la prenotazione sia stata effettuata in maniera corretta è stata effettuata nell'UC2
+            //La verifica del corretto inserimento di una nuova prenotazione è stata effettuata nell'UC2
+            //La verifica della conferma di una nuova prenotazione è stata effettuata nell'UC2
+            
+            //Verifica della modifica di una prenotazione
+            assertTrue(giocoPadel.modificaPrenotazione());
+            System.out.println("Modifica Prenotazione avvenuta con successo");
+            
+            //Verifica della rimozione di una prenotazione
+            assertTrue(giocoPadel.rimuoviPrenotazione());
+            System.out.println("Rimozione Prenotazione avvenuta con successo");
+            
+            //Verifica nell'elenco inserimento della prenotazione
+            elencoPrenotazioni = giocoPadel.getElencoPrenotazioni();
+            
+            System.out.println(elencoPrenotazioni);
+                    System.out.println("Elenco delle prenotazioni:");
+                    for (Prenotazione prenotazione : elencoPrenotazioni.values()) {
+                        System.out.println("Id prenotazione: " + prenotazione.getIdPrenotazione());
+                        System.out.println("Richiesta Attrezzatura: " + prenotazione.isAttrezzaturaRichiesta());
+                        System.out.println("Giorno prenotazione: " + prenotazione.getGiornoPrenotazione());
+                        System.out.println("Ora Inizio: " + prenotazione.getOraInizio());
+                        System.out.println("Ora Fine: " + prenotazione.getOraFine());
+                        System.out.println("Costo Prenotazione: " + prenotazione.getCostoPrenotazione());
+                        System.out.println("Email 1: " + prenotazione.getOrganizzatore().getEmail());
+                        System.out.println("Email 2: " + prenotazione.getPartecipante2().getEmail());
+                        System.out.println("Email 3: " + prenotazione.getPartecipante3().getEmail());
+                        System.out.println("Email 4: " + prenotazione.getPartecipante4().getEmail());
+                        System.out.println("Id campo: " + prenotazione.getCampoPadel());
+                        System.out.println("---------------");
+                        
+                        idPrenotazione=prenotazione.getIdPrenotazione();
+                    }   
+            
+            } catch (Exception e) {
+                System.out.println("Errore: " + e.getMessage());
+        }
+    }   
 }
