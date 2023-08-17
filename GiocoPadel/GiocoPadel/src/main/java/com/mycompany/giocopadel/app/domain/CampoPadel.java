@@ -24,8 +24,6 @@ public class CampoPadel {
         return idCampo;
     }
 
-    
-    
     public void setPrezzo(float nuovoPrezzo){
        this.prezzo=nuovoPrezzo;
     }
@@ -37,6 +35,11 @@ public class CampoPadel {
         double prezzoCampo = durataPrenotazioneOre * prezzo;
 
         return prezzoCampo;
+    }
+    
+    //Funzioni per testing
+    public float getPrezzo(){
+        return prezzo;
     }
 }
 

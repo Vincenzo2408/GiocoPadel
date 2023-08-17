@@ -52,10 +52,10 @@ public class Magazzino {
        return costoSingoloAttrezzatura; 
     }
 
-    void setnumeroRacchette(int numeroRacchette) {
-        racchetteRichieste=racchetteRichieste+numeroRacchette; }
+    public void setnumeroRacchette(int numeroRacchette) {
+         racchetteRichieste=racchetteRichieste+numeroRacchette; }
 
-    void setnumeroPalline(int numeroPalline) {
+    public void setnumeroPalline(int numeroPalline) {
         pallineRichieste=pallineRichieste+numeroPalline; 
     }
 }

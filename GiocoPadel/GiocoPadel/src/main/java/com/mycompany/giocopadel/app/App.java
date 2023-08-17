@@ -9,7 +9,6 @@ import com.mycompany.giocopadel.app.domain.GiocoPadel;
 import com.mycompany.giocopadel.app.domain.Observer;
 import com.mycompany.giocopadel.app.domain.Padeleur;
 
-
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

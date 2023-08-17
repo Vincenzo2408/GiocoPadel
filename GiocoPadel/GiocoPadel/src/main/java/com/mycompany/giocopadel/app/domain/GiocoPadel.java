@@ -440,19 +440,20 @@ public class GiocoPadel {
     
     public boolean modificaPrenotazione() { //UC3
         System.out.println("Inserisci ID della prenotazione da modificare");
-        int idPrenotazioneDaModificare=tastiera.nextInt();
+        Scanner tastiera=new Scanner(System.in);
+        String text=tastiera.next();
+        int idPrenotazioneDaModificare=Integer.valueOf(text);
         
         Prenotazione prenotazioneDaModificare = elencoPrenotazioni.get(idPrenotazioneDaModificare);
         
         if(prenotazioneDaModificare != null){
             sconto=prenotazioneDaModificare.getCostoPrenotazione();
             System.out.println("Per la prenotazione avevi speso: "+sconto + "euro che ti verranno decurtati nella modifica prenotazione");
-            elencoPrenotazioni.remove(prenotazioneDaModificare);
+            elencoPrenotazioni.remove(idPrenotazioneDaModificare);
             rimuoviPrenotazioneDaFile(idPrenotazioneDaModificare);
             if(prenotazioneDaModificare.isAttrezzaturaRichiesta()){
                 String idGiorno=creazioneidGiorno(prenotazioneDaModificare);
-                Magazzino magazzinoDaModificare=elencoMagazzino.get(idGiorno);
-                elencoMagazzino.remove(magazzinoDaModificare);
+                elencoMagazzino.remove(idGiorno);
                 rimuoviMagazzinoDaFile(idGiorno); 
             }
             return true;
@@ -462,16 +463,16 @@ public class GiocoPadel {
 
     public boolean rimuoviPrenotazione() { //UC3
         System.out.println("Inserisci ID della prenotazione da rimuovere");
+        Scanner tastiera=new Scanner(System.in);
         int idPrenotazioneDaRimuovere=tastiera.nextInt();
         
         Prenotazione prenotazioneDaRimuovere = elencoPrenotazioni.get(idPrenotazioneDaRimuovere);
         if(prenotazioneDaRimuovere != null){
-            elencoPrenotazioni.remove(prenotazioneDaRimuovere);
+            elencoPrenotazioni.remove(idPrenotazioneDaRimuovere);
             rimuoviPrenotazioneDaFile(idPrenotazioneDaRimuovere);
             if(prenotazioneDaRimuovere.isAttrezzaturaRichiesta()){
                 String idGiorno=creazioneidGiorno(prenotazioneDaRimuovere);
-                Magazzino magazzinoDaModificare=elencoMagazzino.get(idGiorno);
-                elencoMagazzino.remove(magazzinoDaModificare);
+                elencoMagazzino.remove(idGiorno);
                 rimuoviMagazzinoDaFile(idGiorno); 
             }
             
@@ -554,6 +555,7 @@ public class GiocoPadel {
     }
 
     public void conteggioPartite() { //UC5
+        Scanner tastiera=new Scanner(System.in);
         int conteggio=0;
         System.out.println("Inserisci identificativo del campo di Padel di cui vuoi conoscere quante partite sono state effettuate"); 
         int idCampo=tastiera.nextInt();
@@ -563,13 +565,14 @@ public class GiocoPadel {
                     conteggio++;
                 }
             }
-            System.out.println("Il numero di partite effettuate nel campo " + idCampo + "è: " + conteggio);
+            System.out.println("Il numero di partite effettuate nel campo " + idCampo + " è: " + conteggio);
         }
         else
             System.out.println("Inserimento errato del campo");
     }
     
     public void modificaPrezzi(){ //UC6
+        Scanner tastiera = new Scanner(System.in);
         System.out.println("Di quale campo di padel vuoi modificare il prezzo?");
         int idCampo=tastiera.nextInt();
         if(idCampo>0 && idCampo<4){
@@ -649,5 +652,13 @@ public class GiocoPadel {
     //Funzioni necessarie per testing
     public Map<Integer, Prenotazione> getElencoPrenotazioni() {
         return elencoPrenotazioni;
+    }
+
+    public Map<String, Magazzino> getElencoMagazzino() {
+        return elencoMagazzino;
+    }
+    
+    public Map<Integer, CampoPadel> getElencoCampiPadel() {
+        return elencoCampiPadel;
     }
 }
