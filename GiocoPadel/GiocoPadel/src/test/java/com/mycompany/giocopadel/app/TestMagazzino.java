@@ -141,4 +141,34 @@ public class TestMagazzino {
             fail("Errore: " + e.getMessage());
        }
     }
+    
+    @Test
+    void testsetRacchetteTotali() {
+        try{
+            Magazzino magazzino = elencoMagazzino.get("31/12/999910:0011:001");
+            int numeroRacchetteTest=5;
+            int numeroRacchetteTotaliTest=magazzino.getracchetteTotali();
+            numeroRacchetteTotaliTest=numeroRacchetteTotaliTest+numeroRacchetteTest;
+            magazzino.setracchetteTotali(numeroRacchetteTest);
+            assertEquals(numeroRacchetteTotaliTest, magazzino.getracchetteTotali());
+        }
+        catch(Exception e) {
+            fail("Errore: " + e.getMessage());
+       }
+    }
+    
+     @Test
+    void testsetPallineTotali() {
+        try{
+            Magazzino magazzino = elencoMagazzino.get("31/12/999910:0011:001");
+            int numeroPallineTest=10;
+            int numeroPallineTotaliTest=magazzino.getpallineTotali();
+            numeroPallineTotaliTest=numeroPallineTotaliTest+numeroPallineTest;
+            magazzino.setpallineTotali(numeroPallineTest);
+            assertEquals(numeroPallineTotaliTest, magazzino.getpallineTotali());
+        }
+        catch(Exception e) {
+            fail("Errore: " + e.getMessage());
+       }
+    }
 }

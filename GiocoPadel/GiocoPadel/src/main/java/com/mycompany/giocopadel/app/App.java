@@ -47,7 +47,7 @@ public class App {
         Map<String, Padeleur> elencoPadeleur;
 
         do {
-            System.out.println("Seleziona cosa si desidera fare: \n1. Inserire nuovo padeleur \n2. Gestione delle prenotazioni (CRUD) \n3. Conteggio partite in un campo di padel \n4. Modifica prezzi Campi Padel \n0. Uscita");
+            System.out.println("Seleziona cosa si desidera fare: \n1. Inserire nuovo padeleur \n2. Gestione delle prenotazioni (CRUD) \n3. Conteggio partite in un campo di padel \n4. Modifica prezzi Campi Padel \n5. Modifica quantità totali in magazzino \n0. Uscita");
             try {
                 scelta = tastiera.nextInt();
             } catch (NumberFormatException n) {
@@ -101,8 +101,13 @@ public class App {
                     System.out.println("Modifica prezzi campi da padel");
                     giocopadel.modificaPrezzi();
                     break;
+                
+                case 5: //UC7
+                    System.out.println("Modifica quantità totali in magazzino");
+                    giocopadel.modificaMagazzino();
+                    break;
                     
-                case 5:
+                case 6:
                     elencoPadeleur = giocopadel.getElencoPadeleur();
                     System.out.println("Elenco dei Padeleur:");
                     for (Padeleur padeleur : elencoPadeleur.values()) {

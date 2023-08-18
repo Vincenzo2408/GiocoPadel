@@ -122,6 +122,8 @@ public class TestGiocoPadel {
         numeroRacchette = 0;
         numeroPalline = 0;
         magazzino = null;
+        
+        
     }
 
     @Test
@@ -387,5 +389,63 @@ public class TestGiocoPadel {
            fail("Errore: " +e.getMessage());
        }
     
+    }
+    
+    @Test
+    @DisplayName ("Test UC7")
+    public void TestUC7(){
+        try{
+             elencoMagazzino=giocoPadel.getElencoMagazzino();
+             Magazzino magazzinoPrima = new Magazzino ("0",0,0);
+             System.out.println("Le quantità prima delle modifiche: Racchette "+ magazzinoPrima.getracchetteTotali() + " Palline " + magazzinoPrima.getpallineTotali());
+            //Verifica modifica quantità racchette
+            System.out.println("7.1 Modifica racchette Totali");
+            String input="1 5";
+            InputStream stream = new ByteArrayInputStream(input.getBytes());
+            System.setIn(stream);
+            giocoPadel.modificaMagazzino();
+            System.setIn(System.in);
+            System.out.println("7.1 Modifica numero racchette Totali avvenuto con successo");
+            System.out.println("----------------------------------------------------------------------");
+            
+            //Verifica modifica quantità palline
+            System.out.println("7.2 Modifica palline Totali");
+            input="2 10";
+            stream = new ByteArrayInputStream(input.getBytes());
+            System.setIn(stream);
+            giocoPadel.modificaMagazzino();
+            System.setIn(System.in);
+            System.out.println("7.2 Modifica numero palline Totali avvenuto con successo");
+            System.out.println("----------------------------------------------------------------------");
+            
+            Magazzino magazzinoDopo = new Magazzino ("0", 0 ,0);
+            System.out.println("Le quantità dopo le modifiche: Racchette "+ magazzinoDopo.getracchetteTotali() + " Palline " + magazzinoDopo.getpallineTotali());
+            
+             //Ripristino    
+            PrintStream originalOut = System.out; // Salva l'output standard originale
+
+     
+                    System.setOut(new PrintStream(new OutputStream() {
+                        public void write(int b) {
+                            // Fa nulla
+                        }
+                    }));
+                    
+            input="1 -5";
+            stream = new ByteArrayInputStream(input.getBytes());
+            System.setIn(stream);
+            giocoPadel.modificaMagazzino();
+            System.setIn(System.in);        
+            
+            input="2 -10";
+            stream = new ByteArrayInputStream(input.getBytes());
+            System.setIn(stream);
+            giocoPadel.modificaMagazzino();
+            System.setIn(System.in);    
+            
+            System.setOut(originalOut);
+        }catch(Exception e){
+            fail("Errore: "+e.getMessage());
+        }
     }
 }

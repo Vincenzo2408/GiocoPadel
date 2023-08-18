@@ -65,6 +65,10 @@ public class GiocoPadel {
         loadElencoPrenotazioni();
         loadElencoMagazzino();
         
+        Magazzino magazzino=new Magazzino("0",0,0);
+        magazzino.loadquantitaTotali();
+       
+        
         this.padeleurFactory = new DefaultPadeleurFactory();
     }
 
@@ -649,6 +653,62 @@ public class GiocoPadel {
         }
     }
     
+    public void modificaMagazzino() { //UC7
+        Scanner tastiera=new Scanner(System.in);
+        System.out.println("Cosa vuoi modificare: 1.Quantità totali racchette 2.Quanitità totali palline");
+        int scelta=tastiera.nextInt();
+        System.out.println("Quante quantità vuoi aggiungere? ");
+        int aggiunta=tastiera.nextInt();
+        Magazzino prendimagazzino=new Magazzino("0",0,0); //Serve per il file, non da inserire in UML
+        int racchetteTotali=prendimagazzino.getracchetteTotali(); //Serve per il file, non da inserire in UML
+        int pallineTotali=prendimagazzino.getpallineTotali(); //Serve per il file, non da inserire in UML
+        switch(scelta){
+            case 1:
+                for(Magazzino magazzino : elencoMagazzino.values()){
+                    magazzino.setracchetteTotali(aggiunta);
+                    racchetteTotali=magazzino.getracchetteTotali(); //Serve per il file, non da inserire in UML
+                }
+                break;
+      
+            case 2:
+                for(Magazzino magazzino : elencoMagazzino.values()){
+                    magazzino.setpallineTotali(aggiunta);
+                    pallineTotali=magazzino.getpallineTotali(); //Serve per il file, non da inserire in UML
+                }
+                break;
+            default:
+                System.out.println("Scelta non valida");
+                Magazzino magazzino=new Magazzino("0",0,0); //Serve per il file, non da inserire in UML
+                racchetteTotali=magazzino.getracchetteTotali(); //Serve per il file, non da inserire in UML
+                pallineTotali=magazzino.getpallineTotali(); //Serve per il file, non da inserire in UML
+        }
+        
+         List<String> riganuova = new ArrayList<>();
+         try {
+             
+            BufferedReader reader = new BufferedReader(new FileReader("quantitaTotali.txt"));
+            
+            String Nuovariga=Integer.toString(racchetteTotali)+","+Integer.toString(pallineTotali);
+            riganuova.add(Nuovariga);
+            
+            reader.close();
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter("quantitaTotali.txt"));
+            for (String rigaDaScrivere : riganuova) {
+                writer.write(rigaDaScrivere);
+                writer.newLine();
+            }
+            writer.close();
+            
+        } catch (IOException e) {
+            System.out.println("Errore durante la rimozione della prenotazione dal file: " + e.getMessage());
+        
+        }
+       
+    }
+    
+   
+    
     //Funzioni necessarie per testing
     public Map<Integer, Prenotazione> getElencoPrenotazioni() {
         return elencoPrenotazioni;
@@ -661,4 +721,8 @@ public class GiocoPadel {
     public Map<Integer, CampoPadel> getElencoCampiPadel() {
         return elencoCampiPadel;
     }
+
+    
+
+    
 }
