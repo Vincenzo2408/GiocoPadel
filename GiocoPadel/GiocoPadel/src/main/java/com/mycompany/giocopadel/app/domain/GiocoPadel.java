@@ -659,28 +659,28 @@ public class GiocoPadel {
         int scelta=tastiera.nextInt();
         System.out.println("Quante quantità vuoi aggiungere? ");
         int aggiunta=tastiera.nextInt();
-        Magazzino prendimagazzino=new Magazzino("0",0,0); //Serve per il file, non da inserire in UML
-        int racchetteTotali=prendimagazzino.getracchetteTotali(); //Serve per il file, non da inserire in UML
-        int pallineTotali=prendimagazzino.getpallineTotali(); //Serve per il file, non da inserire in UML
+        Magazzino prendimagazzino=new Magazzino("0",0,0);
+        int racchetteTotali=prendimagazzino.getracchetteTotali();
+        int pallineTotali=prendimagazzino.getpallineTotali();
         switch(scelta){
             case 1:
                 for(Magazzino magazzino : elencoMagazzino.values()){
                     magazzino.setracchetteTotali(aggiunta);
-                    racchetteTotali=magazzino.getracchetteTotali(); //Serve per il file, non da inserire in UML
+                    racchetteTotali=magazzino.getracchetteTotali();
                 }
                 break;
       
             case 2:
                 for(Magazzino magazzino : elencoMagazzino.values()){
                     magazzino.setpallineTotali(aggiunta);
-                    pallineTotali=magazzino.getpallineTotali(); //Serve per il file, non da inserire in UML
+                    pallineTotali=magazzino.getpallineTotali();
                 }
                 break;
             default:
                 System.out.println("Scelta non valida");
-                Magazzino magazzino=new Magazzino("0",0,0); //Serve per il file, non da inserire in UML
-                racchetteTotali=magazzino.getracchetteTotali(); //Serve per il file, non da inserire in UML
-                pallineTotali=magazzino.getpallineTotali(); //Serve per il file, non da inserire in UML
+                Magazzino magazzino=new Magazzino("0",0,0);
+                racchetteTotali=magazzino.getracchetteTotali();
+                pallineTotali=magazzino.getpallineTotali();
         }
         
          List<String> riganuova = new ArrayList<>();

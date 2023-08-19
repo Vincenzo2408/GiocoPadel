@@ -251,7 +251,7 @@ public class TestGiocoPadel {
             System.out.println("----------------------------------------------------------------------");
             
             //Verifica disponibilità di un campo (esito negativo)
-            System.out.println("2.9 Verifica se il campo" + idCampo + "è disponibile nel giorno" + sdf.format(giornoPrenotazione) + "dalle" + oraInizio + " alle" + oraFine);
+            System.out.println("2.9 Verifica se il campo " + idCampo + " è disponibile nel giorno " + sdf.format(giornoPrenotazione) + " dalle " + oraInizio + " alle " + oraFine);
             assertFalse(giocoPadel.ControlloPrenotazione(idCampo, giornoPrenotazione, oraInizio, oraFine), "2.2 Errore: il campo è disponibile");
             System.out.println("2.9 Il campo non è disponibile");
             System.out.println("----------------------------------------------------------------------");
