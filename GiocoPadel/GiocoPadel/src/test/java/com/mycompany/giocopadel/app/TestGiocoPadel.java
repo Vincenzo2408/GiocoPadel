@@ -80,7 +80,7 @@ public class TestGiocoPadel {
        email2 = "loredana.blu@example.com";
        email3 = "francesco.marrone@example.com";
        email4 = "luigi.verdi@example.com";
-       String dataPrenotazione = "08/10/2023";
+       String dataPrenotazione = "31/12/9999";
        // String dataPrenotazione = "" per verifica rimozione rimborso;
        giornoPrenotazione = sdf.parse(dataPrenotazione);
        String oraInizioString = "15:40";
@@ -154,11 +154,16 @@ public class TestGiocoPadel {
             System.out.println("1.4 Conferma Inserimento Padeleur avvenuto con successo \n");
             
             //Verifica nell'elenco inserimento di Maria De Filippi
+          
+            
             elencoPadeleur = giocoPadel.getElencoPadeleur();
+            assertTrue(elencoPadeleur.containsKey("MRA789")); /* Controllo sostitutivo migliore */
+            
                     System.out.println("Elenco dei Padeleur:");
                     for (Padeleur padeleur : elencoPadeleur.values()) {
                         System.out.println("Codice fiscale: " + padeleur.getCodiceFiscale());
                         System.out.println("Email: " + padeleur.getEmail());
+                        
                     }
             System.out.println("----------------------------------------------------------------------");
             
@@ -248,6 +253,9 @@ public class TestGiocoPadel {
                     System.out.println("Id prenotazione: " + prenotazione.getIdPrenotazione());      
                     idPrenotazione=prenotazione.getIdPrenotazione();
                 }   
+                
+            assertTrue(elencoPrenotazioni.containsKey(idPrenotazione)); /* Controllo sostitutivo migliore */
+            
             System.out.println("----------------------------------------------------------------------");
             
             //Verifica disponibilità di un campo (esito negativo)
@@ -295,6 +303,7 @@ public class TestGiocoPadel {
             for (Prenotazione prenotazione : elencoPrenotazioni.values()) {
                 idPrenotazione=prenotazione.getIdPrenotazione();
             }   
+            
                     
             System.out.println("3.1 Il prezzo aggiuntivo da versare risulta essere: " +elencoPrenotazioni.get(idPrenotazione).getCostoPrenotazione());
             
@@ -308,6 +317,7 @@ public class TestGiocoPadel {
                     System.out.println("3.1 Comparazione trovata");
                 }
             }
+            assertTrue(elencoMagazzino.containsKey(idGiorno)); /* Controllo sostitutivo migliore */
             System.out.println("----------------------------------------------------------------------");
                       
             //Verifica della rimozione di una prenotazione [La prova di politica di rimborso da settare ad inizio codice a seconda del giorno dell'esame]
@@ -353,7 +363,9 @@ public class TestGiocoPadel {
                 System.setIn(stream);
                 giocoPadel.conteggioPartite();
                 System.setIn(System.in);
+                
             }
+            
             System.out.println("5.1 Conteggio avvenuto correttamente");
             System.out.println("----------------------------------------------------------------------");   
        } catch (Exception e){
@@ -381,6 +393,8 @@ public class TestGiocoPadel {
            for(CampoPadel campopadel: elencoCampiPadel.values()){
                System.out.println("CampoPadel: "+campopadel.getIdCampo()+" al prezzo di: " +campopadel.getPrezzo());
            }
+           
+           assertEquals(15.80, elencoCampiPadel.get(1).getPrezzo(),0.01f); /* Controllo sostitutivo migliore */
            
            giocoPadel.modificaCostoFile(1, costoRipristinato);
            
@@ -418,9 +432,12 @@ public class TestGiocoPadel {
             System.out.println("7.2 Modifica numero palline Totali avvenuto con successo");
             System.out.println("----------------------------------------------------------------------");
             
+            
             Magazzino magazzinoDopo = new Magazzino ("0", 0 ,0);
             System.out.println("Le quantità dopo le modifiche: Racchette "+ magazzinoDopo.getracchetteTotali() + " Palline " + magazzinoDopo.getpallineTotali());
             
+            assertEquals(magazzinoPrima.getracchetteTotali()+5,magazzinoDopo.getracchetteTotali()); /* Controllo sostitutivo migliore */
+            assertEquals(magazzinoPrima.getpallineTotali()+10,magazzinoDopo.getpallineTotali()); /* Controllo sostitutivo migliore */
              //Ripristino    
             PrintStream originalOut = System.out; // Salva l'output standard originale
 
