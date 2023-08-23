@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.giocopadel.app;
 
 import com.mycompany.giocopadel.app.domain.*;
@@ -10,7 +5,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,17 +12,10 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
-import java.util.Scanner;
-        
-
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Test;
 
-/**
- *
- * @author gerar
- */
 public class TestGiocoPadel {
     static GiocoPadel giocoPadel;
     static Padeleur personaEsistente;
@@ -69,33 +56,31 @@ public class TestGiocoPadel {
     
     @BeforeEach
     public void initTest() throws ParseException{
-       nome = "Maria";
-       cognome = "De Filippi";
-       email = "mariadefilippi@example.com";
-       codiceFiscale = "MRA789";
-       String dataInput = "05/12/1961";
-       dataDiNascita = sdf.parse(dataInput);   
-       personaEsistente = giocoPadel.getPadeleurByEmail("mario.rossi@example.com");
+        nome = "Maria";
+        cognome = "De Filippi";
+        email = "mariadefilippi@example.com";
+        codiceFiscale = "MRA789";
+        String dataInput = "05/12/1961";
+        dataDiNascita = sdf.parse(dataInput);   
+        personaEsistente = giocoPadel.getPadeleurByEmail("mario.rossi@example.com");
        
-       email2 = "loredana.blu@example.com";
-       email3 = "francesco.marrone@example.com";
-       email4 = "luigi.verdi@example.com";
-       String dataPrenotazione = "31/12/9999";
-       // String dataPrenotazione = "" per verifica rimozione rimborso;
-       giornoPrenotazione = sdf.parse(dataPrenotazione);
-       String oraInizioString = "15:40";
-       LocalTime localTimeInizio = LocalTime.parse(oraInizioString, DateTimeFormatter.ofPattern("HH:mm"));
-       oraInizio = Time.valueOf(localTimeInizio);
-       String oraFineString="16:30";
-       LocalTime localTimeFine = LocalTime.parse(oraFineString, DateTimeFormatter.ofPattern("HH:mm"));
-       oraFine = Time.valueOf(localTimeFine);
-       idCampo = 2;
-       idPrenotazione=0;
-       numeroRacchette = 4;
-       numeroPalline = 4;
-       magazzino = new Magazzino("0",0,0);
-       
-      
+        email2 = "loredana.blu@example.com";
+        email3 = "francesco.marrone@example.com";
+        email4 = "luigi.verdi@example.com";
+        String dataPrenotazione = "31/12/9999";
+        // String dataPrenotazione = "" per verifica rimozione rimborso;
+        giornoPrenotazione = sdf.parse(dataPrenotazione);
+        String oraInizioString = "15:40";
+        LocalTime localTimeInizio = LocalTime.parse(oraInizioString, DateTimeFormatter.ofPattern("HH:mm"));
+        oraInizio = Time.valueOf(localTimeInizio);
+        String oraFineString="16:30";
+        LocalTime localTimeFine = LocalTime.parse(oraFineString, DateTimeFormatter.ofPattern("HH:mm"));
+        oraFine = Time.valueOf(localTimeFine);
+        idCampo = 2;
+        idPrenotazione=0;
+        numeroRacchette = 4;
+        numeroPalline = 4;
+        magazzino = new Magazzino("0",0,0);
     }
     
     @AfterEach
@@ -121,9 +106,7 @@ public class TestGiocoPadel {
         
         numeroRacchette = 0;
         numeroPalline = 0;
-        magazzino = null;
-        
-        
+        magazzino = null; 
     }
 
     @Test
@@ -154,8 +137,6 @@ public class TestGiocoPadel {
             System.out.println("1.4 Conferma Inserimento Padeleur avvenuto con successo \n");
             
             //Verifica nell'elenco inserimento di Maria De Filippi
-          
-            
             elencoPadeleur = giocoPadel.getElencoPadeleur();
             assertTrue(elencoPadeleur.containsKey("MRA789")); /* Controllo sostitutivo migliore */
             
@@ -399,19 +380,18 @@ public class TestGiocoPadel {
            giocoPadel.modificaCostoFile(1, costoRipristinato);
            
            System.out.println("----------------------------------------------------------------------");   
-       } catch (Exception e){
+        } catch (Exception e){
            fail("Errore: " +e.getMessage());
-       }
-    
+        }
     }
     
     @Test
     @DisplayName ("Test UC7")
     public void TestUC7(){
         try{
-             elencoMagazzino=giocoPadel.getElencoMagazzino();
-             Magazzino magazzinoPrima = new Magazzino ("0",0,0);
-             System.out.println("Le quantità prima delle modifiche: Racchette "+ magazzinoPrima.getracchetteTotali() + " Palline " + magazzinoPrima.getpallineTotali());
+            elencoMagazzino=giocoPadel.getElencoMagazzino();
+            Magazzino magazzinoPrima = new Magazzino ("0",0,0);
+            System.out.println("Le quantità prima delle modifiche: Racchette "+ magazzinoPrima.getracchetteTotali() + " Palline " + magazzinoPrima.getpallineTotali());
             //Verifica modifica quantità racchette
             System.out.println("7.1 Modifica racchette Totali");
             String input="1 5";
@@ -438,7 +418,7 @@ public class TestGiocoPadel {
             
             assertEquals(magazzinoPrima.getracchetteTotali()+5,magazzinoDopo.getracchetteTotali()); /* Controllo sostitutivo migliore */
             assertEquals(magazzinoPrima.getpallineTotali()+10,magazzinoDopo.getpallineTotali()); /* Controllo sostitutivo migliore */
-             //Ripristino    
+            //Ripristino    
             PrintStream originalOut = System.out; // Salva l'output standard originale
 
      

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.giocopadel.app.domain;
 
 import java.util.Map;
@@ -17,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +62,6 @@ public class GiocoPadel {
         Magazzino magazzino=new Magazzino("0",0,0);
         magazzino.loadquantitaTotali();
        
-        
         this.padeleurFactory = new DefaultPadeleurFactory();
     }
 
@@ -97,11 +90,9 @@ public class GiocoPadel {
 
                     Padeleur padeleur = new Padeleur(nome, cognome, codiceFiscale, dataDiNascita, email);
 
-
-                        // Aggiungi il giocatore all'elencoPadeleur
+                    // Aggiungi il giocatore all'elencoPadeleur
                     elencoPadeleur.put(codiceFiscale, padeleur);
                 }
-
             }
             bfElencoPadeleur.close();
             System.out.println("Caricamento dei padeleur completato con successo");
@@ -412,17 +403,17 @@ public class GiocoPadel {
     }
     
     public void salvaMagazzinoSuFile(Magazzino magazzino) {
-    try {
-        BufferedWriter writer = new BufferedWriter(new FileWriter("magazzini.txt", true));
-        String riga = magazzino.getidGiorno() + "," + magazzino.getracchetteRichieste() + "," + magazzino.getpallineRichieste();
-        writer.write(riga);
-        writer.newLine();
-        writer.close();
-        System.out.println("Magazzino salvato su file con successo.");
-    } catch (IOException e) {
-        System.out.println("Errore durante il salvataggio del magazzino su file: " + e.getMessage());
-    }
-}
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("magazzini.txt", true));
+            String riga = magazzino.getidGiorno() + "," + magazzino.getracchetteRichieste() + "," + magazzino.getpallineRichieste();
+            writer.write(riga);
+            writer.newLine();
+            writer.close();
+            System.out.println("Magazzino salvato su file con successo.");
+        } catch (IOException e) {
+            System.out.println("Errore durante il salvataggio del magazzino su file: " + e.getMessage());
+        }
+    }   
 
     public void salvaPrenotazioneSuFile(Prenotazione prenotazione) {
         try {
@@ -707,8 +698,6 @@ public class GiocoPadel {
        
     }
     
-   
-    
     //Funzioni necessarie per testing
     public Map<Integer, Prenotazione> getElencoPrenotazioni() {
         return elencoPrenotazioni;
@@ -721,8 +710,4 @@ public class GiocoPadel {
     public Map<Integer, CampoPadel> getElencoCampiPadel() {
         return elencoCampiPadel;
     }
-
-    
-
-    
 }

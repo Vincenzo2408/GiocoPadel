@@ -1,28 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.giocopadel.app;
 
 import static com.mycompany.giocopadel.app.TestGiocoPadel.giocoPadel;
 import com.mycompany.giocopadel.app.domain.*;
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- *
- * @author gerar
- */
 public class TestPadeleur {
     
    Map<String, Padeleur> elencoPadeleur;
@@ -50,7 +39,7 @@ public class TestPadeleur {
         try{
             Padeleur padeleur = elencoPadeleur.get("paolobonolis@example.com");
             String emailTest="paolobonolis@example.com";
-            assertEquals("paolobonolis@example.com",padeleur.getEmail());
+            assertEquals(emailTest,padeleur.getEmail());
         }catch(Exception e){
             fail("Errore: " + e.getMessage());
         }
@@ -61,7 +50,7 @@ public class TestPadeleur {
      try{
          Padeleur padeleur = elencoPadeleur.get("paolobonolis@example.com");
          String nomeTest="Paolo";
-         assertEquals("Paolo",padeleur.getNome());
+         assertEquals(nomeTest,padeleur.getNome());
         }catch(Exception e){
             fail("Errore: " + e.getMessage());
         }
@@ -72,7 +61,7 @@ public class TestPadeleur {
      try{
          Padeleur padeleur=elencoPadeleur.get("paolobonolis@example.com");
          String cognomeTest="Bonolis";
-         assertEquals("Bonolis",padeleur.getCognome());
+         assertEquals(cognomeTest,padeleur.getCognome());
         }catch(Exception e){
             fail("Errore: " + e.getMessage());
         }
@@ -83,7 +72,7 @@ public class TestPadeleur {
      try{
          Padeleur padeleur=elencoPadeleur.get("paolobonolis@example.com");
          String codiceFiscaleTest="PBN145";
-         assertEquals("PBN145",padeleur.getCodiceFiscale());
+         assertEquals(codiceFiscaleTest,padeleur.getCodiceFiscale());
         }catch(Exception e){
             fail("Errore: " + e.getMessage());
         }
@@ -99,8 +88,4 @@ public class TestPadeleur {
             fail("Errore: " + e.getMessage());
         }
     }
-    
-    
-
-  
 }
